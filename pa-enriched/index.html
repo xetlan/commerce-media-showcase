@@ -1,0 +1,747 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Adidas Originals × CStore · Spring Drop ZX 500 RM — PA enriched events edition</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#f6f7fb; --card:#ffffff; --ink:#0f172a; --mute:#64748b; --line:#e5e7eb;
+    --primary:#4f46e5; --primary-soft:#eef2ff;
+    --good:#059669; --good-soft:#ecfdf5;
+    --warn:#d97706; --warn-soft:#fffbeb;
+    --bad:#dc2626; --bad-soft:#fef2f2;
+    --shadow:0 1px 2px rgba(15,23,42,.04), 0 4px 12px rgba(15,23,42,.04);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Helvetica,Arial,sans-serif}
+  a{color:var(--primary);text-decoration:none}
+  .wrap{max-width:1280px;margin:0 auto;padding:24px}
+  header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:8px}
+  h1{font-size:20px;font-weight:700;margin:0;letter-spacing:-.01em}
+  .sub{color:var(--mute);font-size:13px}
+  .pillrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-size:12px;color:var(--mute)}
+  .pill.dot::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--primary)}
+  .banner{margin:12px 0 20px;padding:10px 14px;border-radius:8px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-size:12.5px}
+  .banner b{color:#7c2d12}
+  .grid{display:grid;gap:16px}
+  .kpi{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .kpi-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;box-shadow:var(--shadow)}
+  .kpi-label{color:var(--mute);font-size:12px;text-transform:uppercase;letter-spacing:.04em;font-weight:600}
+  .kpi-value{font-size:28px;font-weight:700;letter-spacing:-.02em;margin-top:6px}
+  .kpi-delta{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;margin-top:6px;padding:2px 8px;border-radius:999px}
+  .delta-up{background:var(--good-soft);color:var(--good)}
+  .delta-down{background:var(--bad-soft);color:var(--bad)}
+  .delta-flat{background:#f1f5f9;color:#475569}
+  section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:var(--shadow);margin-top:20px}
+  section h2{margin:0 0 4px;font-size:15px;font-weight:700;letter-spacing:-.005em}
+  section .q{color:var(--mute);font-size:12.5px;margin-bottom:14px}
+  .sense{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:10px;background:var(--primary-soft);border:1px solid #c7d2fe;color:#312e81;font-size:13px;margin-bottom:16px}
+  .sense .badge{flex:none;padding:2px 8px;border-radius:6px;background:var(--primary);color:#fff;font-size:10.5px;font-weight:700;letter-spacing:.04em}
+  .two{display:grid;gap:16px;grid-template-columns:1.4fr 1fr}
+  .three{display:grid;gap:16px;grid-template-columns:repeat(3,minmax(0,1fr))}
+  @media (max-width:980px){ .two,.three,.kpi{grid-template-columns:1fr} }
+  table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px}
+  th,td{padding:9px 10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+  th:first-child,td:first-child{text-align:left}
+  th{background:#f8fafc;color:var(--mute);font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;border-top:1px solid var(--line)}
+  tbody tr:hover{background:#fafbfd}
+  tfoot td{font-weight:700;background:#f8fafc;border-bottom:none}
+  .tag{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11.5px;font-weight:600}
+  .tag-good{background:var(--good-soft);color:var(--good)}
+  .tag-warn{background:var(--warn-soft);color:var(--warn)}
+  .tag-bad{background:var(--bad-soft);color:var(--bad)}
+  canvas{max-width:100%}
+  .heat{display:grid;gap:6px}
+  .heat .row{display:grid;grid-template-columns:180px 1fr 60px;gap:10px;align-items:center;font-size:12.5px}
+  .heat .row .lbl{color:var(--mute)}
+  .heat .row .bar{height:18px;border-radius:4px;background:linear-gradient(90deg,#eef2ff,#4f46e5)}
+  .heat .row .score{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+  .takeaways{margin:14px 0 0;padding-left:18px;color:#1e293b;font-size:13px}
+  .takeaways li{margin:4px 0}
+  .reqs{margin-top:14px;padding:10px 12px;background:#f8fafc;border:1px dashed var(--line);border-radius:8px;color:#475569;font-size:12.5px}
+  .reqs b{color:#0f172a}
+  .footer{margin:28px 0 8px;color:var(--mute);font-size:12px;text-align:center}
+  .commentary{background:linear-gradient(180deg,#fafbff,#ffffff);border:1px solid #c7d2fe;margin-top:32px}
+  .commentary .lede{max-width:760px;margin:0 auto 18px;color:var(--mute);font-size:13px;text-align:center}
+  .prose{max-width:760px;margin:0 auto;color:#1e293b}
+  .prose h3{margin:28px 0 8px;font-size:15px;font-weight:700;letter-spacing:-.005em;color:#0f172a}
+  .prose h3:first-of-type{margin-top:8px}
+  .prose h4{margin:18px 0 4px;font-size:13px;font-weight:700;color:#312e81;text-transform:uppercase;letter-spacing:.04em}
+  .prose p{margin:8px 0;font-size:14px;line-height:1.65}
+  .prose ol,.prose ul{margin:8px 0 8px 18px;padding:0;font-size:14px;line-height:1.65}
+  .prose li{margin:4px 0}
+  .prose b{color:#0f172a}
+  .prose .tldr{padding:14px 16px;background:#eef2ff;border:1px solid #c7d2fe;border-radius:10px;margin:8px 0 0;color:#1e1b4b}
+  .prose .ask{padding:12px 14px;background:#ecfdf5;border-left:3px solid var(--good);border-radius:6px;margin:8px 0;color:#064e3b}
+  .prose .risk{padding:12px 14px;background:#fef2f2;border-left:3px solid var(--bad);border-radius:6px;margin:8px 0;color:#7f1d1d}
+  .brief{background:#0f172a;color:#e2e8f0;border:1px solid #1e293b;margin-top:8px}
+  .brief h2{color:#fff}
+  .brief .lede{color:#94a3b8;font-size:13px;margin:4px 0 14px}
+  .brief-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:14px 0 8px}
+  @media (max-width:980px){ .brief-grid{grid-template-columns:repeat(2,1fr)} }
+  .brief-cell{background:#1e293b;border:1px solid #334155;border-radius:10px;padding:12px}
+  .brief-cell .k{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:#94a3b8;font-weight:600}
+  .brief-cell .v{font-size:15px;font-weight:600;color:#f1f5f9;margin-top:4px}
+  .brief h3{margin:22px 0 6px;font-size:14px;color:#cbd5e1;text-transform:uppercase;letter-spacing:.04em}
+  .brief p, .brief li{color:#cbd5e1;font-size:13.5px;line-height:1.65}
+  .brief ol,.brief ul{margin:6px 0 6px 18px;padding:0}
+  .brief b{color:#fff}
+  .outcome{margin-top:20px}
+  .goalvsachieved th{background:#0f172a;color:#e2e8f0;border-top:none}
+  .verdict{margin-top:14px;padding:14px 16px;background:linear-gradient(90deg,#ecfdf5,#fffbeb);border:1px solid #d1fae5;border-radius:10px;color:#0f172a;font-size:14px;line-height:1.6}
+  .status-good{color:var(--good);font-weight:700}
+  .status-warn{color:var(--warn);font-weight:700}
+  .status-bad{color:var(--bad);font-weight:700}
+  .divider{margin:32px 0 8px;display:flex;align-items:center;gap:12px;color:var(--mute);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+  .divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--line)}
+  .datasource{background:#fefce8;border:1px solid #fde68a}
+  .datasource h2{color:#78350f}
+  .datasource .lede{max-width:none;text-align:left;font-size:13.5px;color:#713f12;margin:4px 0 8px}
+  .datasource h3{color:#92400e;text-transform:uppercase;font-size:12px;letter-spacing:.05em;margin:18px 0 8px;font-weight:700}
+  .schema-grid{display:grid;grid-template-columns:1fr;gap:10px;margin:8px 0}
+  .schema-cell{background:#fff;border:1px solid #fef3c7;border-radius:10px;padding:12px 14px;font-size:13px;line-height:1.85;color:#1f2937}
+  .schema-cat{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:#92400e;font-weight:700;margin-bottom:8px}
+  .datasource code,.super-card code,.prose code{display:inline-block;background:#fef3c7;color:#78350f;padding:1px 7px;border-radius:4px;font-size:11.5px;margin:1px 1px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
+  .callout-pa{margin-top:14px;padding:12px 14px;background:#fff7ed;border-left:3px solid #f59e0b;border-radius:6px;color:#7c2d12;font-size:13px;line-height:1.6}
+  .superpowers{background:linear-gradient(180deg,#ecfeff,#ffffff);border:1px solid #a5f3fc;margin-top:32px}
+  .superpowers h2{color:#155e75}
+  .super-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:14px}
+  @media (max-width:980px){ .super-grid{grid-template-columns:1fr} }
+  .super-card{background:#fff;border:1px solid #cffafe;border-radius:10px;padding:14px}
+  .super-card h4{margin:0 0 6px;font-size:13.5px;color:#0e7490;font-weight:700}
+  .super-card p{margin:0;font-size:13px;line-height:1.6;color:#1e293b}
+  .super-card code{background:#ecfeff;color:#0e7490}
+  .prose code{background:#eef2ff;color:#312e81}
+  .small{font-size:12px;color:var(--mute)}
+  .pageframe{border:1px solid var(--line);border-radius:10px;padding:14px;background:#fbfbfd}
+  .pageframe h4{margin:0 0 8px;font-size:13px;color:#334155}
+  .nowrap{white-space:nowrap}
+  .num{font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div>
+    <h1>Commerce Media Performance</h1>
+    <div class="sub">Spring Drop ZX 500 RM · <b style="color:var(--primary)">PA-only edition</b> — built entirely on enriched Product Analytics events, no Merchandising module</div>
+  </div>
+  <div class="pillrow">
+    <span class="pill dot">Brand: <b style="color:var(--ink)">Adidas</b></span>
+    <span class="pill">Last 30 days</span>
+    <span class="pill">All devices</span>
+    <span class="pill">CStore Demo · Contentsquare PA (enriched events)</span>
+  </div>
+</header>
+
+<div class="banner"><b>Illustrative data.</b> All figures are fabricated for showcase purposes. Numbers represent realistic relative magnitudes for a mid-to-large retailer at ~10M monthly sessions. <b>This edition is built entirely on Contentsquare Product Analytics (PA) event data with property enrichment</b> — no Merchandising module, no catalog ingestion, no Zoning module. The PA event schema that powers every panel below is documented in the next section.</div>
+
+<!-- DATA SOURCE — PA enriched events -->
+<section class="datasource">
+  <h2>Data source — Product Analytics with enriched events</h2>
+  <div class="lede">Every analysis on this page is a PA query against a single auto-captured event stream, augmented with the property enrichments below. <b>The same dashboards. The same numbers. Without a Merchandising catalog, without a Zoning configuration.</b></div>
+
+  <h3>Event-property model — applied at the SDK / tag-management layer</h3>
+  <div class="schema-grid">
+    <div class="schema-cell">
+      <div class="schema-cat">Event-level properties (on every click / view / transaction)</div>
+      <code>placement_id</code> <code>placement_type</code> <code>placement_position</code> <code>placement_zone_id</code> <code>page_template</code> <code>fold_position</code> <code>sku</code> <code>product_brand</code> <code>product_franchise</code> <code>product_price</code> <code>revenue</code> <code>currency</code> <code>campaign_id</code> <code>campaign_window</code> <code>frustration_signal</code>
+      <div style="margin-top:6px;font-size:12px;color:#78350f"><i>placement_type values: hero_banner · search_carousel · category_plp_slot · pdp_crosssell · checkout_upsell · branded_landing_page</i></div>
+    </div>
+    <div class="schema-cell">
+      <div class="schema-cat">User-level properties (stitched across sessions and devices)</div>
+      <code>customer_id</code> <code>loyalty_tier</code> <code>ltv_bucket</code> <code>recency_bucket</code> <code>device_class</code> <code>first_purchase_date</code> <code>total_orders</code> <code>total_spend</code> <code>experiment_variant</code>
+      <div style="margin-top:6px;font-size:12px;color:#78350f"><i>ltv_bucket: high_intent (&gt;$200) · mid · low · first_time · recency_bucket: active · lapsed_90 · lapsed_365</i></div>
+    </div>
+    <div class="schema-cell">
+      <div class="schema-cat">Identity model</div>
+      <code>anonymous_id</code> stitched to <code>user_id</code> on login or known-customer identification. <b>Cross-device, cross-session attribution is the default behavior, not a bolt-on.</b> A user who sees the Hero banner on mobile Tuesday and converts on desktop Friday is one funnel completion, not two unrelated events.
+    </div>
+  </div>
+
+  <h3>Custom events fired by the campaign-tracking layer</h3>
+  <div class="schema-cell">
+    <ul style="margin:0;padding-left:18px">
+      <li><code>placement_exposure</code> — fires on viewport entry of any placement zone; carries <code>placement_id</code>, <code>placement_type</code>, <code>placement_position</code>, <code>page_template</code>, <code>fold_position</code>, <code>product_brand</code>, <code>sku</code></li>
+      <li><code>placement_click</code> — fires on click of any sponsored slot; placement properties + <code>sku</code> + <code>product_brand</code></li>
+      <li><code>add_to_cart</code> · <code>checkout_started</code> · <code>order_completed</code> — standard ecommerce events with <code>sku</code> / <code>revenue</code> / <code>currency</code></li>
+      <li><code>frustration_signal</code> — emitted on rage-click, dead-click, slow load &gt;3s, or JS error within a sponsored zone. Aggregated per <code>placement_id</code> to compute a Frustration Score proxy.</li>
+    </ul>
+  </div>
+
+  <div class="callout-pa">
+    <b>Why this scales.</b> Every dashboard below is a PA query against this stream. The retailer maintains no Merchandising catalog. No mapping needs to be redrawn for a new placement type — it drops in as a new <code>placement_type</code> enum value and the downstream queries continue to work. Identity stitching is automatic. The same event stream feeds A/B test analysis, retention cohorts, and audience destinations to ad platforms — see the <i>"What enriched PA data does here"</i> section below the dashboards.
+  </div>
+</section>
+
+<!-- CAMPAIGN BRIEF (pre-context) -->
+<section class="brief">
+  <h2>The campaign — what this dashboard reports on</h2>
+  <div class="lede">Pre-context for the performance data below. Brief written at kickoff, results reconciled against it at month-end.</div>
+
+  <div class="brief-grid">
+    <div class="brief-cell"><div class="k">Campaign</div><div class="v">Spring Drop — ZX 500 RM</div></div>
+    <div class="brief-cell"><div class="k">Brand</div><div class="v">Adidas Originals</div></div>
+    <div class="brief-cell"><div class="k">Retailer</div><div class="v">CStore (~10M sess/mo)</div></div>
+    <div class="brief-cell"><div class="k">Window</div><div class="v">11 Apr → 10 May 2026 (30 days)</div></div>
+    <div class="brief-cell"><div class="k">Featured product</div><div class="v">ZX 500 RM · 14 variants (5 new colorways)</div></div>
+    <div class="brief-cell"><div class="k">Halo coverage</div><div class="v">Adjacent Originals SKUs (Samba, Gazelle, Stan Smith)</div></div>
+    <div class="brief-cell"><div class="k">Total budget</div><div class="v">$128,000</div></div>
+    <div class="brief-cell"><div class="k">Planning teams</div><div class="v">Adidas commerce-media + CStore retail-media + CRM</div></div>
+    <div class="brief-cell"><div class="k">Tracking layer</div><div class="v">Contentsquare PA · enriched event schema (see above)</div></div>
+    <div class="brief-cell"><div class="k">Identity model</div><div class="v">Stitched user_id (cross-device, cross-session)</div></div>
+    <div class="brief-cell"><div class="k">A/B variants tracked</div><div class="v">Hero creative A vs B via experiment_variant</div></div>
+  </div>
+
+  <h3>Why this campaign existed</h3>
+  <p>ZX 500 RM is a heritage Originals franchise. Spring is its highest-volume buying window — roughly 60% of annual unit sales for the franchise occur Mar–May. Adidas's Q1 ROAS on CStore had drifted down 7% to <b>3.2x</b>, below the brand's commerce-media benchmark of 3.6x. The Spring Drop introduces five new colorways; the campaign was built around the franchise launch with three strategic intents: <b>(1)</b> reverse the Q1 ROAS decline, <b>(2)</b> reclaim share-of-shelf in athletic footwear against the Nike Air Max franchise, and <b>(3)</b> build brand-search momentum heading into the summer drop cycle.</p>
+
+  <h3>Primary objectives — set at kickoff</h3>
+  <ol>
+    <li><b>Revenue</b> — $475,000 attributed; ROAS ≥ 3.70x.</li>
+    <li><b>Growth</b> — +15% MoM in attributed revenue.</li>
+    <li><b>Audience quality</b> — ≥35% of revenue from High-intent + Loyalty segments combined.</li>
+    <li><b>Halo</b> — organic Adidas activity ≥+15% during campaign window vs prior period (PDP views, brand-search queries, organic ATC).</li>
+    <li><b>UX operational</b> — no placement with Frustration Score &gt;0.35 left un-investigated by end of campaign.</li>
+  </ol>
+
+  <h3>Planned inventory mix &amp; creative strategy</h3>
+  <ul>
+    <li><b>Hero banner (35% of budget):</b> top-of-funnel awareness. "Spring Drop" lifestyle creative, 14-variant carousel of new colorways.</li>
+    <li><b>Search carousel (26%):</b> mid-funnel discovery on query intent. Product-grid creative anchored on $80 starting price.</li>
+    <li><b>Category PLP slot (20%):</b> in-category discovery for engaged browsers. Static row 1 (positions 1–4) on athletic footwear PLP.</li>
+    <li><b>PDP cross-sell (13%):</b> consideration / complete-the-look. "Often bought with" position, 3-SKU bundle creative.</li>
+    <li><b>Checkout upsell (4%):</b> conversion-stage bundle save 15% on second pair.</li>
+    <li><b>Branded landing page (2%):</b> campaign hub — full ZX 500 franchise lookbook + 5 new colorways.</li>
+  </ul>
+
+  <h3>Audience &amp; targeting strategy</h3>
+  <p>Prioritize <b>Loyalty</b> (22% of planned exposures) and <b>High-intent shoppers</b> (18%) for conversion-weighted placements (Checkout upsell, PDP cross-sell). Use <b>Lapsed customers</b> (32% planned) and <b>First-time visitors</b> (28%) for awareness placements (Hero, Search). Halo measurement window set to T-30 vs T+30 against prior-period baseline (same retailer, same product franchise, seasonality-adjusted).</p>
+</section>
+
+<!-- OUTCOME SUMMARY -->
+<section class="outcome">
+  <h2>Result vs goal — 30-day reconciliation</h2>
+  <div class="q">Did the Spring Drop campaign hit what it set out to do? Six KPIs, six readings.</div>
+
+  <table class="goalvsachieved">
+    <thead><tr><th>Objective</th><th>Goal</th><th>Achieved</th><th>Δ</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>Attributed revenue</td><td class="num">$475,000</td><td class="num"><b>$503,580</b></td><td class="num"><span class="tag tag-good">+$28.6K · +6%</span></td><td><span class="status-good">✅ Exceeded</span></td></tr>
+      <tr><td>ROAS</td><td class="num">≥ 3.70x</td><td class="num"><b>3.93x</b></td><td class="num"><span class="tag tag-good">+0.23x</span></td><td><span class="status-good">✅ Exceeded</span></td></tr>
+      <tr><td>MoM growth</td><td class="num">+15%</td><td class="num"><b>+18%</b></td><td class="num"><span class="tag tag-good">+3 pp</span></td><td><span class="status-good">✅ Exceeded</span></td></tr>
+      <tr><td>Audience quality (High-intent + Loyalty share of revenue)</td><td class="num">≥ 35%</td><td class="num"><b>69%</b></td><td class="num"><span class="tag tag-good">+34 pp</span></td><td><span class="status-good">✅✅ Materially exceeded</span></td></tr>
+      <tr><td>Halo lift (organic Adidas activity)</td><td class="num">≥ +15%</td><td class="num"><b>+24% PDP · +31% search</b></td><td class="num"><span class="tag tag-good">+9 to +16 pp</span></td><td><span class="status-good">✅ Exceeded</span></td></tr>
+      <tr><td>UX operational (no placement Frustration Score &gt;0.35 un-investigated)</td><td class="num">0 placements</td><td class="num"><b>2 placements</b></td><td class="num"><span class="tag tag-bad">Hero 0.42 · Branded LP 0.38</span></td><td><span class="status-warn">⚠️ Partial fail</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="verdict">
+    <b>Verdict.</b> Spring Drop over-delivered on every financial and audience goal: revenue beat plan by $28.6K, ROAS landed 0.23x above target, and audience quality came in nearly 2× the goal. Halo measurement confirms the franchise launch did its strategic job — organic Adidas activity climbed +24–31% during the window. <b>The one yellow flag</b> is operational: two placements (Hero banner, Branded landing page) breached the Frustration Score threshold and were not remediated mid-campaign. Those placements are not "campaign failures" — they are the operational opportunity that funds the next campaign's lift (quantified in Dashboard 5 below at <b>~$521K annualized recoverable</b>).
+  </div>
+</section>
+
+<div class="divider">— Performance data follows —</div>
+
+<!-- 1. KPI Strip -->
+<div class="grid kpi">
+  <div class="kpi-card">
+    <div class="kpi-label">Exposure sessions</div>
+    <div class="kpi-value num">2.40M</div>
+    <span class="kpi-delta delta-up">▲ +12.4% MoM</span>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">CTR (weighted)</div>
+    <div class="kpi-value num">3.48%</div>
+    <span class="kpi-delta delta-up">▲ +0.31 pp vs benchmark</span>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">Attributed revenue</div>
+    <div class="kpi-value num">$503,580</div>
+    <span class="kpi-delta delta-up">▲ +18.2% MoM</span>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">ROAS</div>
+    <div class="kpi-value num">3.93x</div>
+    <span class="kpi-delta delta-up">▲ +0.18x MoM · +0.4x vs benchmark</span>
+  </div>
+</div>
+
+<!-- 1b. Revenue trend -->
+<section>
+  <h2>Brand Performance Cockpit — 30-day revenue trend</h2>
+  <div class="q">Is Adidas's commerce media spend on our platform performing and trending in the right direction?</div>
+  <div class="sense"><span class="badge">SENSE</span><div>Adidas sponsored revenue grew <b>+18% MoM</b>, driven primarily by <b>search-carousel exposure on mobile</b>. ROAS held steady at 3.9x despite a 12% increase in inventory served.</div></div>
+  <div style="height:260px"><canvas id="trend"></canvas></div>
+  <ul class="takeaways">
+    <li>Renew Adidas Q3 inventory commitment at current pricing — trajectory and ROAS support a 10–15% rate uplift.</li>
+    <li>Mobile search-carousel is the primary growth lever — extend creative refresh cadence there.</li>
+    <li>Share-of-shelf at 27% — approaching internal 30% concentration ceiling for any single brand in athletic footwear.</li>
+  </ul>
+  <div class="reqs"><b>Data requirements (PA):</b> Events <code>placement_exposure</code> · <code>placement_click</code> · <code>add_to_cart</code> · <code>order_completed</code>, each carrying <code>product_brand=Adidas</code> · <code>sku</code> · <code>revenue</code> · <code>campaign_id=spring_drop_zx500</code>. User properties <code>customer_id</code> (identity-stitched) · <code>loyalty_tier</code> · <code>ltv_bucket</code>. Behavioral cohort: "Adidas-exposed in last 30 days" defined in PA as any user with ≥1 <code>placement_exposure</code> event where <code>product_brand=Adidas</code>.</div>
+</section>
+
+<!-- 2. Placement Breakdown -->
+<section>
+  <h2>Placement-by-Placement Breakdown</h2>
+  <div class="q">Which sponsored placement types are pulling their weight, and which are burning impression budget?</div>
+  <div class="sense"><span class="badge">SENSE</span><div>Hero banner placements show <b>5x lower CR</b> than the placement-average and contribute the largest single source of opportunity cost across the Adidas portfolio.</div></div>
+  <div class="two">
+    <div>
+      <table>
+        <thead><tr>
+          <th>Placement</th><th>Exposure</th><th>CTR</th><th>ATC rate</th><th>CR</th><th>Revenue</th><th>RPME</th><th>Frust.</th>
+        </tr></thead>
+        <tbody>
+          <tr><td>Hero banner (homepage)</td><td class="num">850K</td><td class="num"><span class="tag tag-bad">1.40%</span></td><td class="num"><span class="tag tag-warn">9.0%</span></td><td class="num"><span class="tag tag-bad">3.0%</span></td><td class="num">$39,270</td><td class="num"><span class="tag tag-bad">$46</span></td><td class="num"><span class="tag tag-bad">0.42</span></td></tr>
+          <tr><td>Search carousel</td><td class="num">620K</td><td class="num">4.00%</td><td class="num">15.0%</td><td class="num">6.0%</td><td class="num">$163,680</td><td class="num">$264</td><td class="num">0.18</td></tr>
+          <tr><td>Category PLP slot</td><td class="num">480K</td><td class="num">3.00%</td><td class="num"><span class="tag tag-warn">12.0%</span></td><td class="num"><span class="tag tag-warn">3.8%</span></td><td class="num">$60,170</td><td class="num"><span class="tag tag-warn">$125</span></td><td class="num">0.21</td></tr>
+          <tr><td>PDP cross-sell</td><td class="num">320K</td><td class="num">7.00%</td><td class="num">14.0%</td><td class="num">5.6%</td><td class="num">$137,940</td><td class="num">$431</td><td class="num">0.19</td></tr>
+          <tr><td>Checkout upsell</td><td class="num">95K</td><td class="num">6.00%</td><td class="num"><span class="tag tag-good">25.0%</span></td><td class="num"><span class="tag tag-good">14.0%</span></td><td class="num">$87,780</td><td class="num"><span class="tag tag-good">$924</span></td><td class="num">0.14</td></tr>
+          <tr><td>Branded landing page</td><td class="num">35K</td><td class="num">12.00%</td><td class="num">14.0%</td><td class="num"><span class="tag tag-bad">3.2%</span></td><td class="num">$14,740</td><td class="num">$421</td><td class="num"><span class="tag tag-bad">0.38</span></td></tr>
+        </tbody>
+        <tfoot><tr><td>Total / weighted</td><td class="num">2.40M</td><td class="num">3.48%</td><td class="num">14.0%</td><td class="num">5.49%</td><td class="num">$503,580</td><td class="num">$210</td><td class="num">0.24</td></tr></tfoot>
+      </table>
+      <div class="small" style="margin-top:8px">RPME = Revenue per 1,000 exposure sessions · Frust. = Contentsquare Frustration Score (0–1; >0.35 elevated)</div>
+    </div>
+    <div>
+      <div style="height:300px"><canvas id="rpme"></canvas></div>
+    </div>
+  </div>
+  <ul class="takeaways">
+    <li><b>Hero banner</b> — worst on every conversion metric, highest frustration. Audit creative (autoplay video, 3.2s LCP, rage-click on dismiss). Retire or reprice down to CPM-only.</li>
+    <li><b>Branded landing page</b> — highest CTR (12%), poor CR (3.2%) → classic "good ad, broken landing". Pull Session Replay sample for the 588 ATC-then-bounce sessions.</li>
+    <li><b>Checkout upsell</b> — 4% of budget, 17% of revenue. Push for inventory expansion: more SKUs eligible, broader trigger logic.</li>
+  </ul>
+  <div class="reqs"><b>Data requirements (PA):</b> Every placement event carries <code>placement_type</code> (6 values), <code>placement_id</code>, <code>placement_position</code>, <code>page_template</code>, <code>fold_position</code>. Funnel definition in PA: <code>placement_exposure</code> → <code>placement_click</code> → <code>add_to_cart</code> → <code>order_completed</code>, grouped by <code>placement_type</code>. Frustration Score proxy computed from <code>frustration_signal</code> event count (rage-click + dead-click + slow_load_3s + js_error) aggregated per <code>placement_id</code> divided by <code>placement_exposure</code> count.</div>
+</section>
+
+<!-- 3. Zone Heatmap -->
+<section>
+  <h2>Zone-Level Heatmap Comparison</h2>
+  <div class="q">Where on the page does sponsored content actually capture attention, and are we positioning Adidas placements in the strongest real estate?</div>
+  <div class="sense"><span class="badge">SENSE</span><div>Above-the-fold zones outperform below-the-fold by <b>2.4x on click rate</b>, but PDP cross-sell zones invert this — converting better mid-page than at the top.</div></div>
+  <div class="three">
+    <div class="pageframe">
+      <h4>Homepage</h4>
+      <div class="heat">
+        <div class="row"><span class="lbl">Hero banner (ATF)</span><span class="bar" style="width:41%"></span><span class="score">41</span></div>
+        <div class="row"><span class="lbl">Search carousel (ATF)</span><span class="bar" style="width:73%"></span><span class="score">73</span></div>
+        <div class="row"><span class="lbl">Brand spotlight (ATF)</span><span class="bar" style="width:52%"></span><span class="score">52</span></div>
+        <div class="row"><span class="lbl">Trending strip (BTF)</span><span class="bar" style="width:19%"></span><span class="score">19</span></div>
+      </div>
+    </div>
+    <div class="pageframe">
+      <h4>Category PLP</h4>
+      <div class="heat">
+        <div class="row"><span class="lbl">Sponsored row 1 (pos 1–4)</span><span class="bar" style="width:68%"></span><span class="score">68</span></div>
+        <div class="row"><span class="lbl">Sponsored row 2 (pos 13–16)</span><span class="bar" style="width:34%"></span><span class="score">34</span></div>
+        <div class="row"><span class="lbl">Sponsored row 3 (pos 25–28)</span><span class="bar" style="width:14%"></span><span class="score">14</span></div>
+      </div>
+    </div>
+    <div class="pageframe">
+      <h4>PDP</h4>
+      <div class="heat">
+        <div class="row"><span class="lbl">"Often bought with" (above reviews)</span><span class="bar" style="width:62%"></span><span class="score">62</span></div>
+        <div class="row"><span class="lbl">"You may also like" (mid-scroll)</span><span class="bar" style="width:87%;background:linear-gradient(90deg,#ecfdf5,#059669)"></span><span class="score" style="color:var(--good)">87 ★</span></div>
+        <div class="row"><span class="lbl">"Recently viewed" (footer)</span><span class="bar" style="width:22%"></span><span class="score">22</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="small" style="margin-top:10px">Engagement Intensity = (Exposure rate × Click rate × Attractiveness), normalized 0–100.</div>
+  <ul class="takeaways">
+    <li>Mid-scroll PDP cross-sell zone is the highest-converting real estate on the entire site — Adidas currently buys only the "Often bought with" slot above it. Pitch the mid-scroll position as a premium upsell.</li>
+    <li>Category PLP positions 25+ are exposure-starved (23%). Reprice down or convert to dynamic positions surfaced only for engaged scrollers.</li>
+    <li>Hero banner's 8.1s hesitation time signals confusion, not interest — corroborates Frustration Score in Dashboard 2.</li>
+  </ul>
+  <div class="reqs"><b>Data requirements (PA):</b> Custom <code>placement_exposure</code> event fires on viewport entry of each zone with <code>placement_zone_id</code>, <code>placement_position</code>, <code>page_template</code>, <code>fold_position</code>, <code>time_in_viewport_ms</code>. Heatmap intensity = (<code>placement_click</code> count / <code>placement_exposure</code> count) per <code>placement_zone_id</code>, normalized 0–100. No Zoning module required — every "zone" is a property value, every "click-zone" is an event filter.</div>
+</section>
+
+<!-- 4. Top / Bottom 3 -->
+<section>
+  <h2>Top 3 / Bottom 3 Placements by Conversion Rate</h2>
+  <div class="q">Where should the next dollar of sponsored creative effort go, and which placements should we pull?</div>
+  <div class="sense"><span class="badge">SENSE</span><div>Checkout upsell delivers <b>14% CR — strongest in the portfolio</b> — yet absorbs only 4% of total exposure budget. Reallocation candidate.</div></div>
+  <div class="two">
+    <div>
+      <h4 style="margin:0 0 8px;color:var(--good)">🟢 Top 3</h4>
+      <table>
+        <thead><tr><th>Placement</th><th>CR</th><th>Rev share</th><th>Sig.</th></tr></thead>
+        <tbody>
+          <tr><td>Checkout upsell</td><td class="num"><b>14.0%</b></td><td class="num">17%</td><td><span class="tag tag-good">p&lt;0.01</span></td></tr>
+          <tr><td>Search carousel</td><td class="num">6.0%</td><td class="num">32%</td><td><span class="tag tag-good">p&lt;0.01</span></td></tr>
+          <tr><td>PDP cross-sell</td><td class="num">5.6%</td><td class="num">27%</td><td><span class="tag tag-good">p&lt;0.01</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <h4 style="margin:0 0 8px;color:var(--bad)">🔴 Bottom 3</h4>
+      <table>
+        <thead><tr><th>Placement</th><th>CR</th><th>Rev share</th><th>Sig.</th></tr></thead>
+        <tbody>
+          <tr><td>Hero banner</td><td class="num"><b>3.0%</b></td><td class="num">8%</td><td><span class="tag tag-good">p&lt;0.01</span></td></tr>
+          <tr><td>Branded landing page</td><td class="num">3.2%</td><td class="num">3%</td><td><span class="tag tag-warn">p=0.04</span></td></tr>
+          <tr><td>Category PLP slot</td><td class="num">3.8%</td><td class="num">12%</td><td><span class="tag tag-good">p&lt;0.01</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <ul class="takeaways">
+    <li>Reallocate <b>30% of Hero banner budget (~$12K)</b> to Checkout upsell + Search carousel — projected revenue gain $19K–$28K at current CR.</li>
+    <li>Open three Session Replay investigations: Hero rage-clicks, Branded landing bouncers, Category PLP non-ATCers. Target: one Replay-driven fix per placement in 14 days.</li>
+    <li>Hold weekly review for Branded landing page until significance reaches p&lt;0.01 or placement is retired (currently borderline).</li>
+  </ul>
+  <div class="reqs"><b>Data requirements (PA):</b> PA funnel per <code>placement_type</code>: <code>placement_exposure</code> → <code>placement_click</code> → <code>add_to_cart</code> → <code>order_completed</code>. Statistical significance via PA's built-in two-proportion z-test on funnel CR. Session Replay linked via shared <code>session_id</code>; behavioral cohort <i>"rage-clicked on placement_id=X"</i> auto-generates a Replay filter — one-click drill-down from leaderboard row to replay clips.</div>
+</section>
+
+<!-- 5. Impact Quantification -->
+<section>
+  <h2>Revenue Impact of Underperforming Placements</h2>
+  <div class="q">If we fixed the bottom-quartile placements, how much money is on the table?</div>
+  <div class="sense"><span class="badge">SENSE</span><div>Bringing the bottom three placements to portfolio median CR represents <b>$521K in annualized revenue</b> with 95% statistical confidence.</div></div>
+  <div class="two">
+    <div>
+      <table>
+        <thead><tr><th>Placement</th><th>Current rev</th><th>Lift → median</th><th>Lift → top quartile</th></tr></thead>
+        <tbody>
+          <tr><td>Hero banner</td><td class="num">$39,270</td><td class="num"><span class="tag tag-good">+$22,253</span></td><td class="num"><span class="tag tag-good">+$39,270</span></td></tr>
+          <tr><td>Branded landing page</td><td class="num">$14,740</td><td class="num"><span class="tag tag-good">+$6,930</span></td><td class="num"><span class="tag tag-good">+$12,936</span></td></tr>
+          <tr><td>Category PLP slot</td><td class="num">$60,170</td><td class="num"><span class="tag tag-good">+$14,256</span></td><td class="num"><span class="tag tag-good">+$34,848</span></td></tr>
+        </tbody>
+        <tfoot>
+          <tr><td>Portfolio monthly</td><td class="num">$114,180</td><td class="num"><b>+$43,439</b></td><td class="num"><b>+$87,054</b></td></tr>
+          <tr><td>Annualized</td><td class="num">$1,370,160</td><td class="num"><b>+$521,268</b></td><td class="num"><b>+$1,044,648</b></td></tr>
+        </tfoot>
+      </table>
+      <div class="small" style="margin-top:8px">95% CI derived from click-volume sampling distribution. Holds click volume and AOV constant.</div>
+    </div>
+    <div>
+      <div style="height:280px"><canvas id="impact"></canvas></div>
+    </div>
+  </div>
+  <h4 style="margin:14px 0 6px">Decision matrix</h4>
+  <table>
+    <thead><tr><th>Action</th><th>Investment</th><th>Time-to-value</th><th>Expected lift (annual)</th><th>Recommend</th></tr></thead>
+    <tbody>
+      <tr><td>Hero banner creative refresh + speed fix</td><td class="num">~$45K</td><td class="num">6 weeks</td><td class="num">$250K</td><td><span class="tag tag-good">Proceed</span></td></tr>
+      <tr><td>Branded landing page rebuild (mobile-first)</td><td class="num">~$80K</td><td class="num">10 weeks</td><td class="num">$90K</td><td><span class="tag tag-warn">Hold</span></td></tr>
+      <tr><td>Category PLP SKU-match retune</td><td class="num">~$15K</td><td class="num">3 weeks</td><td class="num">$180K</td><td><span class="tag tag-good">Proceed</span></td></tr>
+    </tbody>
+  </table>
+  <div class="reqs"><b>Data requirements (PA):</b> Counterfactual analysis: compare <code>placement_type</code> cohort conversion rate against placement-portfolio median CR. Lift = (target_cr − current_cr) × click_volume × avg(<code>revenue</code>). 95% CI from binomial sampling distribution on <code>placement_click</code> volume per <code>placement_type</code>. Attribution window: 7-day cross-session via stitched <code>user_id</code> (not session-bound — a key PA advantage over session-anchored attribution).</div>
+</section>
+
+<!-- 6. Yield & Inventory (retailer-side) -->
+<section>
+  <h2>Brand-Partner Yield & Inventory Report</h2>
+  <div class="q">How is the retailer's commerce media inventory selling, who's the strongest revenue base, and which accounts are at renewal risk?</div>
+  <div class="sense"><span class="badge">SENSE</span><div>Two brand partners flagged for renewal risk this period; combined declining revenue of <b>$42K</b> could be recovered with creative refresh on hero placements.</div></div>
+  <div class="two">
+    <div>
+      <h4 style="margin:0 0 8px">Inventory yield by placement</h4>
+      <table>
+        <thead><tr><th>Placement</th><th>Fill rate</th><th>Avg CPM</th><th>YoY rev</th></tr></thead>
+        <tbody>
+          <tr><td>Hero banner</td><td class="num">92%</td><td class="num">$48</td><td class="num">+6%</td></tr>
+          <tr><td>Search carousel</td><td class="num">87%</td><td class="num">$32</td><td class="num">+24%</td></tr>
+          <tr><td>Category PLP slot</td><td class="num">81%</td><td class="num">$24</td><td class="num">+11%</td></tr>
+          <tr><td>PDP cross-sell</td><td class="num">73%</td><td class="num">$18</td><td class="num">+18%</td></tr>
+          <tr><td>Checkout upsell</td><td class="num"><span class="tag tag-warn">65%</span></td><td class="num"><b>$52</b></td><td class="num"><span class="tag tag-good">+41%</span></td></tr>
+          <tr><td>Branded landing page</td><td class="num">100%</td><td class="num">flat $18K</td><td class="num">+9%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <h4 style="margin:0 0 8px">Top 5 brand spenders (last 30 days)</h4>
+      <table>
+        <thead><tr><th>Brand</th><th>Spend</th><th>ROAS</th><th>MoM</th></tr></thead>
+        <tbody>
+          <tr><td>Nike</td><td class="num">$185,000</td><td class="num">4.2x</td><td class="num"><span class="tag tag-good">+9%</span></td></tr>
+          <tr><td><b>Adidas</b></td><td class="num"><b>$128,000</b></td><td class="num"><b>3.93x</b></td><td class="num"><span class="tag tag-good">+18%</span></td></tr>
+          <tr><td>Under Armour</td><td class="num">$96,000</td><td class="num">3.1x</td><td class="num"><span class="tag tag-bad">-4%</span></td></tr>
+          <tr><td>New Balance</td><td class="num">$74,000</td><td class="num">3.6x</td><td class="num"><span class="tag tag-good">+12%</span></td></tr>
+          <tr><td>Puma</td><td class="num">$58,000</td><td class="num">2.4x</td><td class="num"><span class="tag tag-bad">-22%</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <h4 style="margin:14px 0 6px">Renewal-risk flags</h4>
+  <table>
+    <thead><tr><th>Brand</th><th>Affected placement(s)</th><th>Metric</th><th>Δ MoM</th><th>Recommended outreach</th></tr></thead>
+    <tbody>
+      <tr><td>Puma</td><td>Hero banner, Category PLP</td><td>Revenue</td><td class="num"><span class="tag tag-bad">-22%</span></td><td>Q3 creative refresh workshop</td></tr>
+      <tr><td>Asics</td><td>PDP cross-sell</td><td>ATC rate</td><td class="num"><span class="tag tag-bad">-23%</span></td><td>SKU-match audit + Replay diagnostic</td></tr>
+    </tbody>
+  </table>
+  <ul class="takeaways">
+    <li>Schedule Adidas renewal in next 14 days while ROAS at 3.93x — pitch 30% inventory uplift for Q3.</li>
+    <li>Proactive outreach to Puma + Asics with their own diagnostic before they raise the issue. Avoids passive renewal loss.</li>
+    <li>Checkout upsell — highest CPM ($52), lowest fill rate (65%): supply-side problem. Loop in product/eng to expand trigger logic.</li>
+  </ul>
+  <div class="reqs"><b>Data requirements (PA):</b> <code>product_brand</code> event property populated on all placement and purchase events for top 50 brand partners — no catalog needed, brand identity travels on the event itself. Fill rate = <code>placement_exposure</code> count / <code>placement_inventory_available</code> event count per <code>placement_id</code>. Avg CPM joined from external ad-server feed via <code>placement_id</code> key. MoM via PA's built-in period-over-period analysis.</div>
+</section>
+
+<!-- 7. Audience & Halo -->
+<section>
+  <h2>Audience &amp; Halo Effect</h2>
+  <div class="q">Who is sponsored content actually reaching, and is it creating value beyond direct attribution?</div>
+  <div class="sense"><span class="badge">SENSE</span><div>Loyalty members convert at <b>2.1x the rate of first-time visitors</b> when exposed to sponsored Adidas placements — argues for member-priority targeting in the next campaign.</div></div>
+  <div class="two">
+    <div>
+      <h4 style="margin:0 0 8px">Audience composition of Adidas-exposed sessions</h4>
+      <table>
+        <thead><tr><th>Segment</th><th>Exposures</th><th>Revenue</th><th>CR</th><th>AOV</th></tr></thead>
+        <tbody>
+          <tr><td>High-intent (LTV &gt;$200)</td><td class="num">18%</td><td class="num"><b>41%</b></td><td class="num">9.4%</td><td class="num">$134</td></tr>
+          <tr><td>Loyalty members</td><td class="num">22%</td><td class="num">28%</td><td class="num">7.8%</td><td class="num">$118</td></tr>
+          <tr><td>Lapsed (90+ days)</td><td class="num">32%</td><td class="num">22%</td><td class="num">4.2%</td><td class="num">$98</td></tr>
+          <tr><td>First-time visitors</td><td class="num">28%</td><td class="num">9%</td><td class="num">3.7%</td><td class="num">$92</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <div style="height:240px"><canvas id="audience"></canvas></div>
+    </div>
+  </div>
+  <h4 style="margin:14px 0 6px">Halo effect — organic Adidas activity, campaign vs control window</h4>
+  <div class="two">
+    <div>
+      <table>
+        <thead><tr><th>Organic metric (non-sponsored entry)</th><th>Pre-campaign</th><th>During campaign</th><th>Δ</th></tr></thead>
+        <tbody>
+          <tr><td>Organic Adidas PDP views</td><td class="num">142,000</td><td class="num">176,400</td><td class="num"><span class="tag tag-good">+24%</span></td></tr>
+          <tr><td>Organic Adidas brand search queries</td><td class="num">38,200</td><td class="num">50,000</td><td class="num"><span class="tag tag-good">+31%</span></td></tr>
+          <tr><td>Organic Adidas add-to-cart</td><td class="num">8,400</td><td class="num">9,900</td><td class="num"><span class="tag tag-good">+18%</span></td></tr>
+          <tr><td>Estimated halo revenue (untracked by attribution)</td><td class="num">—</td><td class="num"><b>$94,200</b></td><td class="num">—</td></tr>
+        </tbody>
+      </table>
+      <div class="small" style="margin-top:8px"><b>Effective ROAS including halo: 4.67x</b> (vs reported 3.93x).</div>
+    </div>
+    <div>
+      <div style="height:240px"><canvas id="halo"></canvas></div>
+    </div>
+  </div>
+  <ul class="takeaways">
+    <li>Pitch Adidas the "halo-inclusive ROAS" methodology as a renewal upgrade — moves reported ROAS from 3.93x to 4.67x without changing actual performance.</li>
+    <li>Next-campaign targeting: weight 60% spend toward Loyalty + High-intent (combined 40% of exposures, 69% of revenue). Reduce First-time visitor share unless objective is awareness.</li>
+    <li>Halo is a measurement competitors (Amazon Ads, Walmart Connect) struggle to deliver — make it a standing differentiator for renewals.</li>
+  </ul>
+  <div class="reqs"><b>Data requirements (PA):</b> User properties <code>loyalty_tier</code>, <code>ltv_bucket</code>, <code>recency_bucket</code> populated from CRM sync — behavioral cohorts defined directly on user properties in PA. Campaign window tagged via <code>campaign_window</code> event property (<code>pre</code> / <code>during</code> / <code>post</code>). Halo: organic <code>pdp_view</code> + <code>brand_search</code> events for <code>product_brand=Adidas</code> where the same stitched <code>user_id</code> has NO upstream <code>placement_click</code> with <code>product_brand=Adidas</code> in the window. Identity stitching is what makes the halo measurement honest — cross-device organic activity is attributed correctly to the right user, not double-counted.</div>
+</section>
+
+<!-- PA SUPERPOWERS — what enriched event data does that Merchandising can't -->
+<section class="superpowers">
+  <h2 style="text-align:center">⚡ What enriched PA data does here that a Merchandising-led setup struggles with</h2>
+  <div class="q" style="text-align:center">Same dashboards above. Same numbers. Different underlying capability — and a wider set of next moves.</div>
+  <div class="super-grid">
+    <div class="super-card">
+      <h4>Cross-device identity stitching</h4>
+      <p>A user who sees the Hero banner on mobile Tuesday and converts on desktop Friday is <b>one funnel completion</b>, not two unrelated events. Session-anchored attribution (the Merchandising default) would have classified it as one exposure plus one unattributed organic purchase. Stitched <code>user_id</code> credits it correctly.</p>
+    </div>
+    <div class="super-card">
+      <h4>Behavioral cohorts → audience destinations</h4>
+      <p>"Users with ≥3 Hero exposures and 0 ATCs in 14 days" is a one-click cohort. Auto-synced to Meta, Google, retailer's CRM and email. The same insight that surfaces the underperforming Hero in D2 funds the next retargeting wave automatically.</p>
+    </div>
+    <div class="super-card">
+      <h4>Retroactive analysis</h4>
+      <p>Decide next month that <i>exposure-to-search</i> is a useful metric? PA replays the historical event stream — no re-instrumentation. Merchandising would require the metric to be pre-defined in a catalog field or mapping rule.</p>
+    </div>
+    <div class="super-card">
+      <h4>Funnel breakdown by any property</h4>
+      <p>Filter the Hero-banner → ATC funnel by <code>device_class</code>, <code>loyalty_tier</code>, time-of-day, creative variant, geo, or any combination. Every breakdown is a click. Merchandising's funnels are fixed paths defined at the mapping level.</p>
+    </div>
+    <div class="super-card">
+      <h4>A/B variant as a user property</h4>
+      <p>Spring Drop ran two Hero creative variants (A: lifestyle imagery, B: product grid). <code>experiment_variant</code> stamped on every downstream event. Result: <b>variant B converted 1.8× variant A</b> — surfaced in a 30-second PA query. No separate experiment-platform integration required.</p>
+    </div>
+    <div class="super-card">
+      <h4>Retention curves on exposed cohorts</h4>
+      <p>Did exposed users return more often than non-exposed in the 30 days <i>after</i> the campaign? PA shows the retention curve natively, by cohort and by <code>placement_type</code>. Halo measurement gets a behavioral counterpart — not just aggregate-volume lift but per-user repeat behavior.</p>
+    </div>
+  </div>
+  <div style="margin-top:16px;padding:12px 14px;background:#fff;border:1px solid #cffafe;border-radius:8px;font-size:13px;line-height:1.6;color:#1e293b">
+    <b>Where PA gives ground vs Merchandising:</b> there's no dedicated catalog-driven product hierarchy UI, no native Zoning heatmap renderer, and Frustration Score must be computed from event signals rather than read from a managed score. For most commerce-media use cases the trade is favorable — flexibility and identity stitching beat a pre-built UI — but a retailer running tens of thousands of SKUs with hierarchical merchandising taxonomies will still want Merchandising for catalog-side workflows.
+  </div>
+</section>
+
+<!-- READER'S GUIDE — narrated commentary -->
+<section class="commentary">
+  <h2 style="text-align:center">📖 How to read this retrospective</h2>
+  <div class="lede">The campaign brief at the top told you what was planned. The seven panels showed what happened. The superpowers section above explained what makes this PA-only setup distinctive. This final section explains <b>how to read the gap between plan and result</b> — and what to demand before the next renewal.</div>
+  <div class="prose">
+
+    <div class="tldr">
+      <h4 style="margin-top:0;color:#1e1b4b">Executive read — 60 seconds</h4>
+      <p>Across 2.4M exposure sessions and $128K of media spend over 30 days, Adidas pulled <b>$503,580 in attributed revenue (ROAS 3.93x)</b> plus an estimated <b>$94,200 of organic halo revenue</b> (effective ROAS 4.67x). Growth is real (+18% MoM) and concentrated in mobile search carousel. But ~$114K of monthly revenue — roughly 23% of the total — comes from three underperforming placements that consume 30% of impression budget. Fixing the bottom three to portfolio median is worth <b>~$521K annualized</b>. To top quartile, <b>~$1.04M</b>. The single most defensible request to make at renewal is to reallocate hero-banner inventory to checkout upsell and mid-scroll PDP cross-sell — placements that produce <b>$924 and $431 of revenue per 1,000 exposures</b> versus $46 from the hero.</p>
+    </div>
+
+    <h3>Reading each panel — Adidas perspective</h3>
+
+    <h4>D1 · Brand Performance Cockpit</h4>
+    <p>The headline <b>ROAS of 3.93x</b> is your anchor for every internal commerce-media debate. Report it up; defend the budget with it. The +18% MoM growth and +0.4x ROAS-vs-benchmark advantage is the case for <i>increasing</i> the next inventory commitment, not holding flat. <b>Share-of-shelf at 27%</b> is context, not a controllable lever — it's how the retailer characterizes your category dominance, useful for narrative but not for negotiation.</p>
+
+    <h4>D2 · Placement Breakdown — the single most important table on the page</h4>
+    <p>Two columns matter most: <b>CR (of clicks)</b> tells you how well each placement converts attention; <b>RPME</b> tells you how productively each thousand impressions earns. RPME is the metric the retailer would <i>not</i> have surfaced if they wanted to hide weak placements — the fact that they did is a transparency signal worth rewarding in the relationship. Three placements at $264–$924 RPME versus three at $46–$421 means a <b>~20x productivity gap inside a single buyer's portfolio</b>. The Frustration Score column (0.42 on hero banner, 0.38 on branded landing page) is your evidence of UX-level problems — if users are rage-clicking on a placement that carries your brand, your brand is what they remember.</p>
+
+    <h4>D3 · Zone Heatmap</h4>
+    <p>Adidas currently buys "Often bought with" (intensity 62) but is <b>not in "You may also like" (intensity 87 — the highest-performing zone on the entire platform)</b>. That gap is the single biggest purchasable upside in this dashboard. The retailer has identified the best real estate and you are not yet in it.</p>
+
+    <h4>D4 · Top 3 / Bottom 3</h4>
+    <p>Treat the diagnostic column as more important than the rank. <b>Checkout upsell at 14% CR is not a coincidence</b> — it's high-intent context with relevant SKUs. The takeaway is not "buy more of what's working"; it's "the retailer has shown they know which formats convert. Negotiate access proportional to that intelligence."</p>
+
+    <h4>D5 · Revenue Impact — the dashboard you take into the renewal meeting</h4>
+    <p>The retailer has quantified <b>$43,439/month of recoverable revenue</b> across three placements — money Adidas is currently <i>spending</i> but <i>not converting</i>. Two of the three optimization decisions are flagged ✅ <b>Proceed</b>: Hero refresh (~$45K cost, $250K expected lift, ~6x ROI) and Category PLP retune (~$15K cost, $180K expected lift, ~12x ROI). The question to bring to renewal: <b>"are these optimizations on the retailer's side as part of the package, or do they fall to Adidas?"</b> That answer is worth more than any rate negotiation.</p>
+
+    <h4>D6 · Yield &amp; Inventory — read for your rank, not your decisions</h4>
+    <p>Adidas is <b>#2 by spend, #2 by ROAS, #1 by MoM growth</b>. Nike outspends you by 45% but is growing at half your rate. That asymmetry is your single strongest negotiating chip — Adidas is the rising account in this retailer's commerce-media book, and you should be treated accordingly.</p>
+
+    <h4>D7 · Audience &amp; Halo — the under-priced panel</h4>
+    <p>Two numbers matter: (a) <b>41% of revenue comes from 18% of exposures</b> (the high-intent segment), which proves the retailer is delivering quality, not just volume; and (b) <b>$94,200 of halo revenue</b> Adidas is paying for but currently does not count in ROAS. Adopting the halo-inclusive methodology moves the headline number from <b>3.93x → 4.67x</b> with zero change in actual performance. That's a free 19% on your board-deck number.</p>
+
+    <h3>The implied result — what the data is telling you</h3>
+    <p>Stripped of the visual chrome: Adidas's commerce media on this retailer is <b>working but unevenly</b>. Two-thirds of the budget produces 90% of the value. The bottom third — anchored by the hero banner — drags the portfolio CR down by ~1.5 percentage points and ~$43K/month of revenue. The retailer's Sense AI surfaces this; Adidas should know it too. The retailer's recommendation in D5 is essentially a self-audit ("we're not delivering on these three placements; here's what we'd need to fix"). Read it as transparency <i>and</i> as a sales-pitch upgrade — both readings are correct.</p>
+
+    <h3>ROI — where the money is</h3>
+    <p>Three recoverable value pools, in order of confidence:</p>
+    <ol>
+      <li><b>Reallocation gain — high confidence, no investment.</b> Move 30% of hero banner spend (~$12K/month, $144K annualized) to checkout upsell and mid-scroll PDP cross-sell. At those placements' current CRs (14% and 5.6%), expected revenue gain is $19K–$28K <i>per month</i>, or <b>$228K–$336K annualized</b>. Requires only an inventory-access conversation.</li>
+      <li><b>Optimization lift — high confidence, retailer-funded if negotiated.</b> If the retailer commits to the Hero refresh + PLP retune flagged ✅ in D5, combined annualized lift is <b>~$430K against ~$60K of work</b>. The right negotiation puts that $60K on the retailer's side. Net to Adidas: $430K incremental revenue, zero incremental cost.</li>
+      <li><b>Halo methodology — measurement upgrade only.</b> Adopting halo-inclusive ROAS moves the reported number from 3.93x → 4.67x. No actual revenue change, but the reported metric supports a defensible <b>15–20% commerce-media budget uplift</b> at the next planning cycle.</li>
+    </ol>
+    <p>Combined credible upside Adidas can demand from this renewal: <b>~$430K of optimization-driven lift + $228K–$336K of reallocation lift</b>, plus a methodology reset on the headline metric. Against the current $6.04M annualized run-rate, that's an additional <b>$660K–$770K of incremental revenue without adding budget</b>.</p>
+
+    <h3>What Adidas should do — priority order</h3>
+    <ol>
+      <li><b>Lock the renewal conversation to the next 14 days</b> while ROAS is climbing and growth is +18% MoM. Leverage is at its highest point right now.</li>
+      <li>In that conversation, demand four things: <i>(a)</i> reallocation of hero-banner inventory at current rates, <i>(b)</i> retailer-funded optimization of the bottom three placements with contractual lift targets, <i>(c)</i> access to the mid-scroll PDP cross-sell zone, <i>(d)</i> standing halo reporting in the monthly review.</li>
+      <li>Internally, switch the reported ROAS metric to <b>halo-inclusive immediately</b>. Communicate the methodology change to finance/marketing leadership <i>before</i> the next QBR, not after.</li>
+      <li>Open a Session Replay request for the <b>421 rage-click sessions on hero banner</b> and the <b>588 ATC-then-bounce sessions on the branded landing page</b>. Both are brand-experience risks Adidas should diagnose first, the retailer second.</li>
+      <li>Defer the Branded landing page rebuild ($80K, 10 weeks) until Replay diagnosis confirms whether the issue is UX (rebuild needed) or audience-mismatch (cheaper targeting fix). The wrong investment here is the largest single risk in the plan.</li>
+    </ol>
+
+    <h3>Renewal-conversation leverage</h3>
+    <p>Three asks land naturally from the data and the retailer cannot easily refuse them, because each is anchored in numbers from their own dashboards:</p>
+    <div class="ask"><b>Ask 1 — Rate hold or modest decline on hero banner.</b> It's underdelivering and the retailer's own dashboard says so (D2 + D5). Anchor: $46 RPME vs $264 portfolio average.</div>
+    <div class="ask"><b>Ask 2 — Premium-rate access to mid-scroll PDP cross-sell</b>, conditional on retailer-funded optimization commitments for the bottom three placements. Anchor: D3 intensity score of 87, vs 62 on the zone Adidas currently occupies.</div>
+    <div class="ask"><b>Ask 3 — Performance-floor clause.</b> If any placement drops more than 20% MoM in CR (the same threshold the retailer uses internally for renewal-risk flags, see D6), Adidas can reallocate that budget without penalty.</div>
+
+    <h3>What's at risk if you don't act</h3>
+    <div class="risk">The bottom three placements will not improve on their own. Current trajectory: <b>~$38K/month ($456K/year) of spend</b> at sub-portfolio CR. Worse, the 0.42 Frustration Score on hero banner means a meaningful share of Adidas brand impressions correlate with a <i>negative</i> on-platform experience. Brand-equity erosion does not show up in this dashboard — it shows up six months later in unaided-awareness studies. Renewing without addressing the bottom three means paying full rate for inventory the retailer has already diagnosed as broken.</div>
+
+    <h3>Questions to challenge the retailer on</h3>
+    <ul>
+      <li><b>Attribution definition.</b> Is "attributed revenue" last-click, exposure-weighted, or first-touch? Different definitions give different numbers — ask which methodology produced the $503K, and whether the same is used to compare across brand partners.</li>
+      <li><b>Halo control window.</b> Was the pre-campaign baseline the same season, or a year-ago period? Seasonality can produce a "halo" that isn't real.</li>
+      <li><b>Statistical significance on Branded landing page.</b> The flag is borderline (p=0.04). How many weeks of data sit behind it? Would the retailer agree to re-read at p&lt;0.01 before final decisions?</li>
+      <li><b>Checkout upsell fill rate of 65%.</b> The retailer has unsold premium inventory on their highest-CR placement. Why isn't Adidas already in it?</li>
+    </ul>
+
+    <h3>Bottom line</h3>
+    <p>The retailer has handed Adidas a fully-quantified, statistically-significant audit of its own commerce-media performance — including the parts that are underperforming. Most brand-side teams never see this level of granularity. The right response is not gratitude; it is to <b>convert the transparency into commercial terms</b> at renewal. Every dollar of recoverable value identified in this dashboard is a number Adidas can name in the negotiation room.</p>
+
+    <h3>Brief for the next campaign (Summer Drop, planning starts now)</h3>
+    <p>What Spring Drop's data tells you about how to scope the next franchise launch:</p>
+    <ol>
+      <li><b>Rebalance the inventory mix.</b> Move 30% of Hero budget into Checkout upsell + mid-scroll PDP cross-sell at planning stage, not mid-flight. Hero stays in the plan as awareness, but at a lower CPM and smaller share.</li>
+      <li><b>Set audience-quality targets higher.</b> Spring Drop hit 69% High-intent + Loyalty share against a 35% goal. Recalibrate the next campaign's audience-quality KPI to ≥55% — closer to actual delivery, harder to game.</li>
+      <li><b>Move Frustration Score from "operational watch" to "kill-switch".</b> Any placement above 0.35 by week 2 of campaign auto-paused pending Replay diagnosis. Pre-negotiate this clause with the retailer.</li>
+      <li><b>Lock halo methodology in advance.</b> Spring Drop produced +24–31% halo, but the measurement was finalized post-hoc. For Summer Drop, the control window, baseline definition, and seasonality adjustment are agreed at kickoff and signed by both teams. Removes the "is the halo real?" debate from the result conversation.</li>
+      <li><b>Set the Summer Drop revenue target at $610K (ROAS ≥4.0x).</b> Spring delivered $503K at 3.93x; +21% revenue and +0.07x ROAS is a defensible step-up given the optimization commitments now negotiable at renewal.</li>
+    </ol>
+
+  </div>
+</section>
+
+<div class="footer">
+  Companion report (markdown, full instrumentation appendix) →
+  <a href="https://github.com/xetlan/commerce-media-showcase/blob/main/README.md">github.com/xetlan/commerce-media-showcase</a>
+  &nbsp;·&nbsp;
+  Original dashboard (no commentary) → <a href="../">commerce-media-showcase</a>
+  &nbsp;·&nbsp;
+  Narrated edition (no brief) → <a href="../narrated/">narrated</a>
+  &nbsp;·&nbsp;
+  Case study (Merch + Zoning framing) → <a href="../case-study/">case-study</a>
+</div>
+
+</div>
+
+<script>
+  Chart.defaults.font.family = "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif";
+  Chart.defaults.color = "#475569";
+  const fmtUSD = v => "$" + (v >= 1000 ? (v/1000).toFixed(0) + "k" : v);
+
+  // 30-day revenue trend
+  const days = Array.from({length:30}, (_,i)=>"D"+(i+1));
+  const trend = [14.2,13.8,14.4,15.0,14.6,15.4,15.1,15.8,16.2,15.9,16.5,17.0,16.8,17.3,17.0,17.6,18.0,17.9,18.4,18.9,18.6,19.0,19.4,19.1,19.6,20.0,19.8,20.2,20.1,20.4];
+  new Chart(document.getElementById("trend"), {
+    type:"line",
+    data:{labels:days,datasets:[{
+      label:"Daily revenue ($k)", data:trend,
+      borderColor:"#4f46e5", backgroundColor:"rgba(79,70,229,.10)",
+      fill:true, tension:.35, borderWidth:2, pointRadius:0, pointHoverRadius:4
+    }]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{y:{ticks:{callback:v=>"$"+v+"k"},grid:{color:"#eef2f7"}}, x:{grid:{display:false}}}}
+  });
+
+  // RPME by placement (horizontal bar)
+  new Chart(document.getElementById("rpme"),{
+    type:"bar",
+    data:{
+      labels:["Checkout upsell","PDP cross-sell","Branded landing","Search carousel","Cat. PLP slot","Hero banner"],
+      datasets:[{label:"Revenue per 1k exposures",data:[924,431,421,264,125,46],
+        backgroundColor:["#059669","#10b981","#34d399","#6366f1","#f59e0b","#ef4444"],borderRadius:6}]
+    },
+    options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},title:{display:true,text:"RPME by placement (illustrative)",font:{size:12,weight:"600"},color:"#334155"}},
+      scales:{x:{ticks:{callback:v=>"$"+v},grid:{color:"#eef2f7"}},y:{grid:{display:false}}}}
+  });
+
+  // Impact (stacked: current + lift to top quartile)
+  new Chart(document.getElementById("impact"),{
+    type:"bar",
+    data:{
+      labels:["Hero banner","Branded LP","Category PLP"],
+      datasets:[
+        {label:"Current revenue",data:[39270,14740,60170],backgroundColor:"#cbd5e1",borderRadius:4},
+        {label:"Lift → median",data:[22253,6930,14256],backgroundColor:"#a5b4fc",borderRadius:4},
+        {label:"Lift → top quartile",data:[17017,6006,20592],backgroundColor:"#4f46e5",borderRadius:4}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:"bottom",labels:{boxWidth:12,font:{size:11}}},title:{display:true,text:"Monthly revenue: current vs potential lift",font:{size:12,weight:"600"},color:"#334155"}},
+      scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,ticks:{callback:v=>"$"+(v/1000)+"k"},grid:{color:"#eef2f7"}}}}
+  });
+
+  // Audience donut
+  new Chart(document.getElementById("audience"),{
+    type:"doughnut",
+    data:{
+      labels:["High-intent","Loyalty","Lapsed","First-time"],
+      datasets:[{data:[41,28,22,9],backgroundColor:["#4f46e5","#10b981","#f59e0b","#94a3b8"],borderWidth:0}]
+    },
+    options:{responsive:true,maintainAspectRatio:false,cutout:"60%",
+      plugins:{legend:{position:"right",labels:{boxWidth:10,font:{size:11}}},title:{display:true,text:"Share of Adidas revenue by audience",font:{size:12,weight:"600"},color:"#334155"}}}
+  });
+
+  // Halo bars
+  new Chart(document.getElementById("halo"),{
+    type:"bar",
+    data:{
+      labels:["Organic PDP views","Brand search","Organic ATC"],
+      datasets:[
+        {label:"Pre-campaign",data:[142000,38200,8400],backgroundColor:"#cbd5e1",borderRadius:4},
+        {label:"During campaign",data:[176400,50000,9900],backgroundColor:"#4f46e5",borderRadius:4}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:"bottom",labels:{boxWidth:12,font:{size:11}}},title:{display:true,text:"Organic Adidas activity — halo effect",font:{size:12,weight:"600"},color:"#334155"}},
+      scales:{y:{ticks:{callback:v=>v>=1000?(v/1000)+"k":v},grid:{color:"#eef2f7"}},x:{grid:{display:false}}}}
+  });
+</script>
+</body>
+</html>
