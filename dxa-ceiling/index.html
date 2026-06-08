@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>DXA Ceiling · Adidas Spring Drop — what Contentsquare DXA alone can generate</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#f6f7fb; --card:#ffffff; --ink:#0f172a; --mute:#64748b; --line:#e5e7eb;
+    --primary:#6366f1; --primary-soft:#eef2ff; --primary-dk:#3730a3;
+    --good:#059669; --good-soft:#ecfdf5;
+    --warn:#d97706; --warn-soft:#fffbeb;
+    --bad:#dc2626; --bad-soft:#fef2f2;
+    --shadow:0 1px 2px rgba(15,23,42,.04), 0 4px 12px rgba(15,23,42,.04);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Helvetica,Arial,sans-serif}
+  a{color:var(--primary);text-decoration:none}
+  .wrap{max-width:1280px;margin:0 auto;padding:24px}
+  header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:8px}
+  h1{font-size:22px;font-weight:700;margin:0;letter-spacing:-.01em}
+  h1 .accent{color:var(--primary)}
+  .sub{color:var(--mute);font-size:13px}
+  .pillrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-size:12px;color:var(--mute)}
+  .pill.brand{background:#eef2ff;border-color:#c7d2fe;color:var(--primary-dk);font-weight:600}
+  .banner{margin:12px 0 20px;padding:10px 14px;border-radius:8px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-size:12.5px}
+  .banner b{color:#7c2d12}
+  section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:var(--shadow);margin-top:20px}
+  section h2{margin:0 0 4px;font-size:15px;font-weight:700;letter-spacing:-.005em}
+  section .q{color:var(--mute);font-size:12.5px;margin-bottom:14px}
+  .dxa-tag{display:inline-block;background:#eef2ff;color:var(--primary-dk);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:4px;letter-spacing:.04em;text-transform:uppercase;margin-left:8px;border:1px solid #c7d2fe}
+  .grid{display:grid;gap:16px}
+  .kpi{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .kpi-card{background:linear-gradient(180deg,#fff,#fafbff);border:1px solid #c7d2fe;border-radius:12px;padding:16px;box-shadow:var(--shadow)}
+  .kpi-label{color:var(--primary-dk);font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;font-weight:700}
+  .kpi-value{font-size:26px;font-weight:700;letter-spacing:-.02em;margin-top:6px;color:var(--ink)}
+  .kpi-note{color:var(--mute);font-size:11.5px;margin-top:6px}
+  .two{display:grid;gap:16px;grid-template-columns:1.3fr 1fr}
+  .three{display:grid;gap:16px;grid-template-columns:repeat(3,minmax(0,1fr))}
+  @media (max-width:980px){ .two,.three,.kpi{grid-template-columns:1fr} }
+  table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px}
+  th,td{padding:9px 10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+  th:first-child,td:first-child{text-align:left;white-space:normal}
+  th{background:#f8fafc;color:var(--mute);font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;border-top:1px solid var(--line)}
+  tbody tr:hover{background:#fafbfd}
+  tfoot td{font-weight:700;background:#f8fafc;border-bottom:none}
+  .tag{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11.5px;font-weight:600}
+  .tag-good{background:var(--good-soft);color:var(--good)}
+  .tag-warn{background:var(--warn-soft);color:var(--warn)}
+  .tag-bad{background:var(--bad-soft);color:var(--bad)}
+  canvas{max-width:100%}
+  .takeaways{margin:14px 0 0;padding-left:18px;color:#1e293b;font-size:13px}
+  .takeaways li{margin:4px 0}
+  .reqs{margin-top:14px;padding:10px 12px;background:#eef2ff;border:1px dashed #c7d2fe;border-radius:8px;color:#3730a3;font-size:12.5px}
+  .footer{margin:28px 0 8px;color:var(--mute);font-size:12px;text-align:center}
+  .num{font-variant-numeric:tabular-nums}
+
+  /* Zoning heatmap visual */
+  .zone-page{border:1px solid var(--line);border-radius:10px;padding:14px;background:#fbfbfd}
+  .zone-page h4{margin:0 0 10px;font-size:13px;color:#334155;font-weight:700}
+  .zone{position:relative;display:grid;grid-template-columns:1fr 90px 90px 90px 90px;gap:8px;align-items:center;padding:8px 10px;border-radius:6px;margin-bottom:6px;font-size:12px;background:#fff;border-left:6px solid var(--primary)}
+  .zone-label{font-weight:600;color:#1e293b}
+  .zone-sub{display:block;font-size:11px;color:var(--mute);font-weight:400;margin-top:2px}
+  .zone .m{text-align:right;font-variant-numeric:tabular-nums}
+  .zone-good{border-left-color:var(--good)}
+  .zone-warn{border-left-color:var(--warn)}
+  .zone-bad{border-left-color:var(--bad)}
+
+  /* Frustration signal stacked bar */
+  .sig-row{display:grid;grid-template-columns:120px 1fr 90px;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}
+  .sig-row:last-child{border-bottom:none}
+  .sig-row .lbl{font-weight:600}
+  .sig-bar{display:flex;height:22px;border-radius:4px;overflow:hidden;background:#f1f5f9}
+  .sig-seg{height:100%}
+
+  /* Funnel viz */
+  .funnel-step{display:grid;grid-template-columns:170px 1fr 80px 80px 80px;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px}
+  .funnel-step:last-child{border-bottom:none}
+  .funnel-bar{height:24px;border-radius:4px;background:linear-gradient(90deg,#e0e7ff,#6366f1)}
+  .funnel-step .stage{font-weight:600}
+  .num-cell{text-align:right;font-variant-numeric:tabular-nums}
+
+  /* Replay cohort cards */
+  .replay-card{padding:12px;border:1px solid var(--line);border-radius:8px;background:#fbfbfd;margin-bottom:8px;display:grid;grid-template-columns:1fr 90px 110px;gap:10px;align-items:center}
+  .replay-card .friction-tag{display:inline-block;padding:2px 7px;border-radius:6px;background:#fef2f2;color:#991b1b;font-size:11px;font-weight:600;margin-right:6px}
+
+  /* Sense insight cards */
+  .sense-card{padding:12px 14px;border:1px solid #c7d2fe;border-radius:10px;margin-bottom:8px;background:linear-gradient(90deg,#fafbff,#fff);display:grid;grid-template-columns:90px 1fr;gap:12px;align-items:start}
+  .sense-card .severity{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:3px 7px;border-radius:4px;text-align:center}
+  .sev-anomaly{background:#fef2f2;color:#991b1b}
+  .sev-opportunity{background:#ecfdf5;color:#065f46}
+  .sev-risk{background:#fffbeb;color:#92400e}
+  .sev-insight{background:#eef2ff;color:#3730a3}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div>
+    <h1><span class="accent">DXA Ceiling</span> — what Contentsquare DXA alone can generate</h1>
+    <div class="sub">Adidas Spring Drop ZX 500 RM · pushed to the limit on DXA only · Zoning, Frustration Score, Speed Lab, Error Analysis, Session Replay, Sense AI</div>
+  </div>
+  <div class="pillrow">
+    <span class="pill brand">Contentsquare DXA</span>
+    <span class="pill">No PA · No Merchandising add-on</span>
+    <span class="pill">Last 30 days</span>
+  </div>
+</header>
+
+<div class="banner"><b>Illustrative data.</b> All figures fabricated. The point of this page is <b>capability ceiling</b> — every panel below is achievable from a fully-instrumented DXA deployment with retail mapping, click-zones, Speed Lab, Error Analysis, Session Replay, and Sense AI enabled. No PA / Heap event stream, no Merchandising add-on. Where DXA cannot natively deliver a view (identity stitching, behavioral cohorts, audience destinations), that absence is called out at the bottom.</div>
+
+<!-- KPI strip -->
+<div class="grid kpi">
+  <div class="kpi-card">
+    <div class="kpi-label">Top frustrated zone</div>
+    <div class="kpi-value num">Hero · 0.42</div>
+    <div class="kpi-note">2,534 frustration signals across 850K exposures</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">Top error impact</div>
+    <div class="kpi-value num">$34,200</div>
+    <div class="kpi-note">checkout-api-503 — 1,420 lost conversions</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">Worst-performing page (LCP)</div>
+    <div class="kpi-value num">Cart · 4.8s</div>
+    <div class="kpi-note">target &lt;2.5s · -18% conv vs LCP &lt;2.5s</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">Sense AI insights flagged</div>
+    <div class="kpi-value num">5 active</div>
+    <div class="kpi-note">2 anomaly · 1 risk · 2 opportunity</div>
+  </div>
+</div>
+
+<!-- 1. Zoning Heatmap with engagement metrics -->
+<section>
+  <h2>1 · Zoning Analysis — engagement intensity per placement zone <span class="dxa-tag">DXA-only</span></h2>
+  <div class="q">Click rate is the easy metric. DXA Zoning also produces <i>attractiveness</i>, <i>hesitation</i>, <i>exposure rate</i> — pre-click signals PA cannot natively measure.</div>
+
+  <div class="three">
+    <div class="zone-page">
+      <h4>Homepage</h4>
+      <div class="zone zone-bad">
+        <div><span class="zone-label">Hero banner</span><span class="zone-sub">ATF · primary</span></div>
+        <div class="m"><b>92%</b><br><span style="color:var(--mute);font-size:10.5px">exposure</span></div>
+        <div class="m"><b>1.4%</b><br><span style="color:var(--mute);font-size:10.5px">click rate</span></div>
+        <div class="m"><b>0.34</b><br><span style="color:var(--mute);font-size:10.5px">attract.</span></div>
+        <div class="m"><b>8.1s</b><br><span style="color:var(--mute);font-size:10.5px">hesitation</span></div>
+      </div>
+      <div class="zone">
+        <div><span class="zone-label">Search carousel</span><span class="zone-sub">ATF · secondary</span></div>
+        <div class="m"><b>78%</b></div><div class="m"><b>4.0%</b></div><div class="m"><b>0.61</b></div><div class="m"><b>2.2s</b></div>
+      </div>
+      <div class="zone">
+        <div><span class="zone-label">Brand spotlight</span><span class="zone-sub">ATF · tertiary</span></div>
+        <div class="m"><b>64%</b></div><div class="m"><b>2.8%</b></div><div class="m"><b>0.47</b></div><div class="m"><b>3.4s</b></div>
+      </div>
+      <div class="zone">
+        <div><span class="zone-label">Trending strip</span><span class="zone-sub">BTF</span></div>
+        <div class="m"><b>41%</b></div><div class="m"><b>0.9%</b></div><div class="m"><b>0.18</b></div><div class="m"><b>5.2s</b></div>
+      </div>
+    </div>
+
+    <div class="zone-page">
+      <h4>Category PLP</h4>
+      <div class="zone zone-good">
+        <div><span class="zone-label">Sponsored row 1</span><span class="zone-sub">positions 1–4</span></div>
+        <div class="m"><b>89%</b></div><div class="m"><b>3.4%</b></div><div class="m"><b>0.62</b></div><div class="m"><b>1.8s</b></div>
+      </div>
+      <div class="zone">
+        <div><span class="zone-label">Sponsored row 2</span><span class="zone-sub">positions 13–16</span></div>
+        <div class="m"><b>52%</b></div><div class="m"><b>2.1%</b></div><div class="m"><b>0.41</b></div><div class="m"><b>3.0s</b></div>
+      </div>
+      <div class="zone zone-bad">
+        <div><span class="zone-label">Sponsored row 3</span><span class="zone-sub">positions 25–28</span></div>
+        <div class="m"><b>23%</b></div><div class="m"><b>1.6%</b></div><div class="m"><b>0.28</b></div><div class="m"><b>4.4s</b></div>
+      </div>
+    </div>
+
+    <div class="zone-page">
+      <h4>PDP</h4>
+      <div class="zone">
+        <div><span class="zone-label">Often bought with</span><span class="zone-sub">above reviews</span></div>
+        <div class="m"><b>71%</b></div><div class="m"><b>5.8%</b></div><div class="m"><b>0.71</b></div><div class="m"><b>1.6s</b></div>
+      </div>
+      <div class="zone zone-good">
+        <div><span class="zone-label">You may also like</span><span class="zone-sub">mid-scroll · ★ peak</span></div>
+        <div class="m"><b>84%</b></div><div class="m"><b>8.2%</b></div><div class="m"><b>0.83</b></div><div class="m"><b>1.4s</b></div>
+      </div>
+      <div class="zone">
+        <div><span class="zone-label">Recently viewed</span><span class="zone-sub">footer</span></div>
+        <div class="m"><b>38%</b></div><div class="m"><b>2.1%</b></div><div class="m"><b>0.32</b></div><div class="m"><b>2.9s</b></div>
+      </div>
+    </div>
+  </div>
+
+  <ul class="takeaways">
+    <li><b>Hero banner attractiveness 0.34</b> (industry threshold 0.50) — even when users see it, fewer than 1 in 3 register engagement signal. The 8.1s hesitation confirms users notice but don't act.</li>
+    <li><b>"You may also like" mid-scroll PDP</b> is the highest-attractiveness zone on the entire platform (0.83). Hesitation of 1.4s means users click almost immediately on what they see — this is the premium real estate.</li>
+    <li>Sponsored Row 3 on Category PLP (positions 25+) has 23% exposure. Inventory is being sold for slots most users never see — reprice or retire.</li>
+  </ul>
+  <div class="reqs"><b>DXA mechanism:</b> Click-zones drawn over page templates via Zoning module. Exposure / click / attractiveness / hesitation computed automatically from session-level engagement signals (cursor, click, scroll, viewport). No event instrumentation required — works on auto-captured DOM-level data.</div>
+</section>
+
+<!-- 2. Frustration Score deep dive -->
+<section>
+  <h2>2 · Frustration Score — managed metric, signal-source breakdown <span class="dxa-tag">DXA-only</span></h2>
+  <div class="q">DXA's Frustration Score is a managed composite from rage clicks, dead clicks, slow loads, JS errors. Per zone, per page, per signal.</div>
+
+  <div class="two">
+    <div>
+      <h4 style="margin:0 0 10px;font-size:13px">Frustration Score by page group</h4>
+      <table>
+        <thead><tr><th>Page group</th><th>Score</th><th>Frustrated sessions</th><th>Exit-on-frustration rate</th></tr></thead>
+        <tbody>
+          <tr><td>Homepage</td><td class="num"><span class="tag tag-warn">0.31</span></td><td class="num">312K</td><td class="num">22%</td></tr>
+          <tr><td>Category PLP</td><td class="num"><span class="tag tag-good">0.21</span></td><td class="num">158K</td><td class="num">14%</td></tr>
+          <tr><td>PDP</td><td class="num"><span class="tag tag-good">0.18</span></td><td class="num">142K</td><td class="num">9%</td></tr>
+          <tr><td>Cart</td><td class="num"><span class="tag tag-bad">0.42</span></td><td class="num">98K</td><td class="num">38%</td></tr>
+          <tr><td>Checkout</td><td class="num"><span class="tag tag-warn">0.22</span></td><td class="num">22K</td><td class="num">31%</td></tr>
+          <tr><td>Order Confirmation</td><td class="num"><span class="tag tag-good">0.06</span></td><td class="num">1.4K</td><td class="num">2%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <h4 style="margin:0 0 10px;font-size:13px">Hero banner zone — signal composition</h4>
+      <div class="sig-row">
+        <div class="lbl">Rage clicks</div>
+        <div class="sig-bar"><div class="sig-seg" style="width:60%;background:#dc2626"></div></div>
+        <div class="num-cell">421 <span style="color:var(--mute);font-size:11px">/ 2,534</span></div>
+      </div>
+      <div class="sig-row">
+        <div class="lbl">Dead clicks</div>
+        <div class="sig-bar"><div class="sig-seg" style="width:78%;background:#f59e0b"></div></div>
+        <div class="num-cell">1,082</div>
+      </div>
+      <div class="sig-row">
+        <div class="lbl">Slow loads &gt;3s</div>
+        <div class="sig-bar"><div class="sig-seg" style="width:65%;background:#fb923c"></div></div>
+        <div class="num-cell">893</div>
+      </div>
+      <div class="sig-row">
+        <div class="lbl">JS errors</div>
+        <div class="sig-bar"><div class="sig-seg" style="width:10%;background:#7c2d12"></div></div>
+        <div class="num-cell">138</div>
+      </div>
+      <div class="reqs" style="margin-top:14px"><b>Aggregate Frustration Score:</b> 0.42 (poor) · contributing weight: dead clicks 43%, slow loads 35%, rage clicks 17%, JS errors 5%</div>
+    </div>
+  </div>
+  <ul class="takeaways">
+    <li><b>Cart page Frustration Score 0.42</b> with 38% exit-on-frustration is the largest UX revenue leak in the entire campaign. Cart fix unlocks downstream conversion across all sponsored placements, not just Adidas.</li>
+    <li>Hero banner's frustration is dominated by <b>dead clicks (1,082)</b> — users clicking visible elements that don't respond. Likely the dismiss "X" or non-clickable hot zones. Replay cohort confirms.</li>
+    <li>JS errors are only 5% of Hero frustration weight, but their fix is the cheapest — escalate to engineering first.</li>
+  </ul>
+  <div class="reqs"><b>DXA mechanism:</b> Frustration Score is a managed composite metric — DXA defines the signal weighting and provides it natively per page group, per zone, per segment. No client-side computation. Threshold-based segmentation (e.g., "frustrated sessions") available as a default segment.</div>
+</section>
+
+<!-- 3. Page-group funnel with drop-off -->
+<section>
+  <h2>3 · Retail funnel with drop-off detail <span class="dxa-tag">DXA-only</span></h2>
+  <div class="q">Where exactly does the Adidas-exposed session leak in the page-group funnel? DXA's funnel module attaches exit-page + frustration-signal context to every drop-off step.</div>
+
+  <div class="funnel-step">
+    <div class="stage">Homepage (exposed)</div>
+    <div class="funnel-bar" style="width:100%"></div>
+    <div class="num-cell">2,400,000</div>
+    <div class="num-cell">100%</div>
+    <div class="num-cell" style="color:var(--mute)">—</div>
+  </div>
+  <div class="funnel-step">
+    <div class="stage">Category PLP</div>
+    <div class="funnel-bar" style="width:74%"></div>
+    <div class="num-cell">1,776,000</div>
+    <div class="num-cell">74%</div>
+    <div class="num-cell"><span class="tag tag-good">-26%</span></div>
+  </div>
+  <div class="funnel-step">
+    <div class="stage">PDP</div>
+    <div class="funnel-bar" style="width:43%"></div>
+    <div class="num-cell">1,040,000</div>
+    <div class="num-cell">59% of PLP</div>
+    <div class="num-cell"><span class="tag tag-good">-41%</span></div>
+  </div>
+  <div class="funnel-step">
+    <div class="stage">Add to Cart</div>
+    <div class="funnel-bar" style="width:14%"></div>
+    <div class="num-cell">340,000</div>
+    <div class="num-cell">33% of PDP</div>
+    <div class="num-cell"><span class="tag tag-warn">-67%</span></div>
+  </div>
+  <div class="funnel-step">
+    <div class="stage">Cart page</div>
+    <div class="funnel-bar" style="width:11%"></div>
+    <div class="num-cell">258,000</div>
+    <div class="num-cell">76% of ATC</div>
+    <div class="num-cell"><span class="tag tag-good">-24%</span></div>
+  </div>
+  <div class="funnel-step">
+    <div class="stage">Checkout</div>
+    <div class="funnel-bar" style="width:4%"></div>
+    <div class="num-cell">89,400</div>
+    <div class="num-cell">35% of Cart</div>
+    <div class="num-cell"><span class="tag tag-bad">-65%</span></div>
+  </div>
+  <div class="funnel-step">
+    <div class="stage">Order Received</div>
+    <div class="funnel-bar" style="width:1.4%"></div>
+    <div class="num-cell">33,170</div>
+    <div class="num-cell">37% of Checkout</div>
+    <div class="num-cell"><span class="tag tag-bad">-63%</span></div>
+  </div>
+
+  <ul class="takeaways">
+    <li><b>Largest leak: Cart → Checkout (-65%)</b>, 168K sessions exit on the Cart page. Cart Frustration Score is 0.42 — these two facts are the same fact, viewed from two angles.</li>
+    <li>Second-biggest leak: PDP → ATC (-67%, 700K sessions). Some of this is browse-vs-buy expected behavior, but the magnitude flags it for split-testing on PDP "Add to Cart" prominence.</li>
+    <li>The 33,170 Order Received conversions reconcile with the campaign top-line of $503,580 (avg basket ~$15K per top-3 spender brand mix; Adidas's share is the 4,578 conversions / $503.58K we've been tracking elsewhere).</li>
+  </ul>
+  <div class="reqs"><b>DXA mechanism:</b> Funnel built across page-group steps in the retail mapping. Drop-off rates computed natively. Exit-page reports, frustration-signal overlays, and Session Replay drill-downs available per step. <b>Note: session-bound</b> — multi-session journeys are not stitched the way PA does.</div>
+</section>
+
+<!-- 4. Speed Lab — Core Web Vitals + conversion impact -->
+<section>
+  <h2>4 · Speed Lab — Core Web Vitals &amp; conversion impact <span class="dxa-tag">DXA-only</span></h2>
+  <div class="q">DXA's Speed Lab measures LCP, INP, CLS per page and correlates each with downstream conversion — a managed analysis PA cannot replicate without external WebVitals tooling.</div>
+
+  <div class="two">
+    <div>
+      <table>
+        <thead><tr><th>Page</th><th>LCP</th><th>INP</th><th>CLS</th><th>vs target</th></tr></thead>
+        <tbody>
+          <tr><td>Homepage</td><td class="num">3.2s</td><td class="num">240ms</td><td class="num">0.18</td><td><span class="tag tag-bad">poor LCP</span></td></tr>
+          <tr><td>Category PLP</td><td class="num">2.4s</td><td class="num">180ms</td><td class="num">0.09</td><td><span class="tag tag-good">good</span></td></tr>
+          <tr><td>PDP</td><td class="num">2.1s</td><td class="num">140ms</td><td class="num">0.06</td><td><span class="tag tag-good">good</span></td></tr>
+          <tr><td>Cart</td><td class="num">4.8s</td><td class="num">420ms</td><td class="num">0.24</td><td><span class="tag tag-bad">poor (all)</span></td></tr>
+          <tr><td>Checkout</td><td class="num">3.6s</td><td class="num">280ms</td><td class="num">0.14</td><td><span class="tag tag-warn">needs work</span></td></tr>
+          <tr><td>Order Received</td><td class="num">2.0s</td><td class="num">130ms</td><td class="num">0.04</td><td><span class="tag tag-good">good</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="height:280px"><canvas id="speedimpact"></canvas></div>
+  </div>
+  <ul class="takeaways">
+    <li><b>Cart LCP 4.8s correlates with -18% conversion rate</b> vs sessions on the same page completing in &lt;2.5s. Worst-impact performance issue in the entire stack.</li>
+    <li>Homepage Hero LCP 3.2s explains a portion of the Hero banner's poor click-through — users abandon before the banner renders fully. Performance fix is upstream of any creative refresh.</li>
+    <li>Checkout INP 420ms (interactivity delay) is the second-most-actionable speed issue — directly correlates with the -65% Cart → Checkout drop-off.</li>
+  </ul>
+  <div class="reqs"><b>DXA mechanism:</b> Speed Lab is a managed DXA module. RUM-style sampling on every session, Core Web Vitals computed and surfaced per page group. Correlation with conversion goal computed natively via Impact-style methodology.</div>
+</section>
+
+<!-- 5. Error Impact on Goal -->
+<section>
+  <h2>5 · Error Analysis — top errors by lost-conversion impact <span class="dxa-tag">DXA-only</span></h2>
+  <div class="q">DXA's Error Analysis joins JS / API / custom errors to the conversion goal and dollarizes the lost revenue. PA captures errors as events; DXA tells you what they cost.</div>
+
+  <table>
+    <thead><tr><th>Error</th><th>Sessions affected</th><th>Lost conversions</th><th>$ lost (attributed)</th><th>Trend</th></tr></thead>
+    <tbody>
+      <tr><td><code style="background:#fef2f2;color:#991b1b;padding:1px 6px;border-radius:4px;font-size:11.5px">checkout-api-503</code> · API timeout on payment submit</td><td class="num">3,418</td><td class="num">1,420</td><td class="num"><b>$34,200</b></td><td class="num"><span class="tag tag-bad">+22% MoM</span></td></tr>
+      <tr><td><code style="background:#fef2f2;color:#991b1b;padding:1px 6px;border-radius:4px;font-size:11.5px">add-to-cart-modal-not-loading</code> · JS · Mobile Safari only</td><td class="num">2,840</td><td class="num">764</td><td class="num"><b>$18,400</b></td><td class="num"><span class="tag tag-warn">+8% MoM</span></td></tr>
+      <tr><td><code style="background:#fef2f2;color:#991b1b;padding:1px 6px;border-radius:4px;font-size:11.5px">image-cdn-timeout</code> · Hero banner image fail</td><td class="num">2,840</td><td class="num">412</td><td class="num"><b>$9,920</b></td><td class="num"><span class="tag tag-bad">+14% MoM</span></td></tr>
+      <tr><td><code style="background:#fef2f2;color:#991b1b;padding:1px 6px;border-radius:4px;font-size:11.5px">size-selector-undefined</code> · JS · PDP variant picker</td><td class="num">1,640</td><td class="num">298</td><td class="num"><b>$7,180</b></td><td class="num"><span class="tag tag-good">-4% MoM</span></td></tr>
+      <tr><td><code style="background:#fef2f2;color:#991b1b;padding:1px 6px;border-radius:4px;font-size:11.5px">api-recommendations-500</code> · PDP cross-sell loader</td><td class="num">980</td><td class="num">142</td><td class="num"><b>$3,420</b></td><td class="num"><span class="tag">flat</span></td></tr>
+    </tbody>
+    <tfoot>
+      <tr><td>Top-5 error impact</td><td class="num">11,718</td><td class="num">3,036</td><td class="num"><b>$73,120</b></td><td class="num">—</td></tr>
+    </tfoot>
+  </table>
+  <ul class="takeaways">
+    <li><b>$34,200 of lost conversions on a single API error</b> (checkout-api-503) — and it's trending up +22% MoM. This is engineering-priority-zero. Sense AI has it flagged below (insight #1).</li>
+    <li>The Hero banner image-CDN failure ($9,920 lost) compounds the placement's underperformance — fix is infrastructure, not creative.</li>
+    <li>Top-5 errors together account for <b>$73K of avoidable monthly revenue loss</b>, dollarized via Impact-style methodology against the Order Received goal.</li>
+  </ul>
+  <div class="reqs"><b>DXA mechanism:</b> Error Analysis auto-captures JS errors, API errors (via XHR/fetch interception), and custom errors. Lost-conversion dollarization computed as: affected sessions × counterfactual CR uplift if error absent × AOV. Managed view — no manual analysis required.</div>
+</section>
+
+<!-- 6. Session Replay cohorts -->
+<section>
+  <h2>6 · Session Replay cohorts — friction surfaced + clip drill-down <span class="dxa-tag">DXA-only</span></h2>
+  <div class="q">DXA auto-tags replay sessions by friction reason. One click from a Frustration Score or Error row to the actual session video.</div>
+
+  <div class="replay-card">
+    <div><span class="friction-tag">Rage click</span> Hero banner dismiss "X" — users repeatedly clicking the close icon on autoplay video<br><span style="color:var(--mute);font-size:12px">Page: Homepage · Zone: hero_banner_homepage</span></div>
+    <div class="num-cell">421 sessions</div>
+    <div><a href="#">View replay clips →</a></div>
+  </div>
+  <div class="replay-card">
+    <div><span class="friction-tag">Dead click</span> Branded landing page "Shop Spring Drop" CTA — button registers no click handler on mobile viewport &lt;414px<br><span style="color:var(--mute);font-size:12px">Page: branded_landing · Device: mobile</span></div>
+    <div class="num-cell">588 sessions</div>
+    <div><a href="#">View replay clips →</a></div>
+  </div>
+  <div class="replay-card">
+    <div><span class="friction-tag">Slow load</span> Cart page — LCP 4.8s, users abandon before content renders<br><span style="color:var(--mute);font-size:12px">Page: cart · LCP &gt;4s</span></div>
+    <div class="num-cell">893 sessions</div>
+    <div><a href="#">View replay clips →</a></div>
+  </div>
+  <div class="replay-card">
+    <div><span class="friction-tag">JS error</span> Size-selector undefined on ZX 500 RM PDP — Chrome v131 specifically<br><span style="color:var(--mute);font-size:12px">Page: pdp · Variant picker</span></div>
+    <div class="num-cell">298 sessions</div>
+    <div><a href="#">View replay clips →</a></div>
+  </div>
+  <div class="replay-card">
+    <div><span class="friction-tag">Scroll struggle</span> PDP — users repeatedly scrolling back to size selector after seeing reviews; tells us reviews placement is blocking purchase intent<br><span style="color:var(--mute);font-size:12px">Page: pdp · Scroll pattern</span></div>
+    <div class="num-cell">1,240 sessions</div>
+    <div><a href="#">View replay clips →</a></div>
+  </div>
+
+  <ul class="takeaways">
+    <li>Each cohort is auto-built from DXA's friction signals. <b>No manual session selection</b> — the analyst is taken straight to the videos that match the symptom.</li>
+    <li>Scroll-struggle cohort on PDP (1,240 sessions) is a UX finding the funnel/Frustration views alone wouldn't surface — pattern detection at the replay-trace level is a DXA strength.</li>
+    <li>Each row drills into a one-click "watch the next 10 clips" workflow — closest tool exists to "show me what's actually happening" without leaving the platform.</li>
+  </ul>
+  <div class="reqs"><b>DXA mechanism:</b> Session Replay captures full DOM events at session start. Auto-tagging via friction-signal aggregation (rage-click, dead-click, slow-load, JS-error pattern matching). Replay filtered by any segment or click-zone.</div>
+</section>
+
+<!-- 7. Sense AI insights + Impact Quantification -->
+<section>
+  <h2>7 · Sense AI insights &amp; Impact Quantification <span class="dxa-tag">DXA-only</span></h2>
+  <div class="q">DXA's Sense AI auto-narrates anomalies, risks, and opportunities. Impact Quantification dollarizes proposed segment-level changes.</div>
+
+  <div class="sense-card">
+    <span class="severity sev-anomaly">Anomaly</span>
+    <div><b>checkout-api-503 errors up +22% MoM</b> · 1,420 lost conversions over the last 30 days, $34,200 attributed revenue impact. Spike began 21 days ago and has not recovered. <i>Recommended: open P0 engineering ticket; dollarized impact already meets escalation threshold.</i></div>
+  </div>
+  <div class="sense-card">
+    <span class="severity sev-risk">Risk</span>
+    <div><b>Cart page Frustration Score breached threshold 18 days ago</b> · 0.42 vs 0.30 alert. Drives 38% exit-on-frustration. Sustained breach indicates structural issue (LCP + dead clicks combined). <i>Recommended: schedule UX review of Cart layout + performance audit.</i></div>
+  </div>
+  <div class="sense-card">
+    <span class="severity sev-opportunity">Opportunity</span>
+    <div><b>PDP "You may also like" zone hit 87 engagement intensity — top of platform.</b> Adidas not yet purchasing this zone. Inventory is open; reallocation from underperforming Hero would yield est. +$28K revenue/month at current zone attractiveness. <i>Recommended: brand-partner pricing conversation.</i></div>
+  </div>
+  <div class="sense-card">
+    <span class="severity sev-opportunity">Opportunity</span>
+    <div><b>Mobile Safari users converting at 3.4x desktop on Category PLP</b> · pattern not present on Homepage. Mobile-Safari-specific creative on Homepage may unlock similar effect. <i>Recommended: A/B test mobile-Safari Hero variant.</i></div>
+  </div>
+  <div class="sense-card">
+    <span class="severity sev-insight">Insight</span>
+    <div><b>Frustrated sessions are 4.1x more likely to bounce on return visit</b> than non-frustrated sessions. Adidas-exposed users have a 14% lower frustration rate than site average, but the 0.42 Cart score is dragging the cohort. <i>Recommended: prioritize Cart UX over additional sponsored inventory in the next planning window.</i></div>
+  </div>
+
+  <h4 style="margin:20px 0 8px;font-size:13px;color:var(--ink)">Impact Quantification — Adidas-exposed vs control segment</h4>
+  <table>
+    <thead><tr><th>Metric</th><th>Adidas-exposed</th><th>Matched control</th><th>Δ</th><th>Stat. sig.</th></tr></thead>
+    <tbody>
+      <tr><td>Conversion rate (Reached Order Received)</td><td class="num">1.91%</td><td class="num">1.73%</td><td class="num"><span class="tag tag-good">+0.18 pp</span></td><td><span class="tag tag-good">p&lt;0.001</span></td></tr>
+      <tr><td>Bounce rate</td><td class="num">28%</td><td class="num">34%</td><td class="num"><span class="tag tag-good">-6 pp</span></td><td><span class="tag tag-good">p&lt;0.001</span></td></tr>
+      <tr><td>Avg session time</td><td class="num">4m 12s</td><td class="num">3m 38s</td><td class="num"><span class="tag tag-good">+34s</span></td><td><span class="tag tag-good">p&lt;0.01</span></td></tr>
+      <tr><td>Pageviews per session</td><td class="num">6.4</td><td class="num">5.1</td><td class="num"><span class="tag tag-good">+1.3</span></td><td><span class="tag tag-good">p&lt;0.001</span></td></tr>
+      <tr><td>Revenue per visit (RPV)</td><td class="num">$8.42</td><td class="num">$5.91</td><td class="num"><span class="tag tag-good">+$2.51</span></td><td><span class="tag tag-good">p&lt;0.001</span></td></tr>
+    </tbody>
+  </table>
+
+  <ul class="takeaways">
+    <li>Adidas exposure produces statistically-significant lifts on every conversion-side metric: <b>+0.18pp CR, +$2.51 RPV, +1.3 pageviews</b>. Confirms the campaign is doing real work, not just being credited for sessions that would have converted anyway.</li>
+    <li>Sense AI surfaces the highest-priority issue (checkout-api-503) and the highest-priority opportunity (You may also like zone) in the same narrative thread — analyst's day is structured automatically.</li>
+  </ul>
+  <div class="reqs"><b>DXA mechanism:</b> Sense runs anomaly detection, threshold breach alerts, and pattern-matching across DXA's metric surfaces. Impact Quantification computes segment-vs-segment lift on conversion goals with built-in significance testing. Both are managed features, not custom queries.</div>
+</section>
+
+<!-- Closing — what DXA cannot do -->
+<section style="background:#fef2f2;border-color:#fecaca">
+  <h2 style="color:#991b1b">What DXA does NOT do well here — be honest</h2>
+  <div class="q" style="color:#7f1d1d">This page pushed DXA to its ceiling. Below the ceiling are real gaps PA fills.</div>
+  <ul class="takeaways" style="color:#7f1d1d">
+    <li><b>No cross-device identity stitching</b> — DXA is session-anchored. A user who exposes on mobile and converts on desktop is two unrelated events. The 18% of conversions that span devices in the PA view are lost here.</li>
+    <li><b>No behavioral cohort definition from event-property combinations</b> — segments are URL-pattern, click-zone, or attribute-based. "Users with ≥3 hero exposures and 0 ATCs in 14d" is awkward at best.</li>
+    <li><b>No audience destinations</b> — cohorts can be exported as segments for use inside DXA, but no native sync to Meta / Google / CRM / Klaviyo.</li>
+    <li><b>No multi-session retention curves</b> — DXA reports session-bound metrics; "do exposed users return more often" is not natively answered.</li>
+    <li><b>No A/B variant analysis without explicit instrumentation</b> — variant tags must be added as a custom segment dimension; flexibility is lower than PA's property-on-every-event model.</li>
+    <li><b>No multi-touch attribution models</b> — DXA's Impact Quantification is segment-vs-segment lift, not first-touch / linear / time-decay attribution comparison.</li>
+    <li><b>No predictive propensity scoring</b> — Sense surfaces patterns retrospectively, doesn't score individual users for forward-looking action.</li>
+  </ul>
+</section>
+
+<div class="footer">
+  Companion editions →
+  <a href="../">original</a> ·
+  <a href="../narrated/">narrated</a> ·
+  <a href="../case-study/">case study</a> ·
+  <a href="../pa-enriched/">PA enriched</a> ·
+  <a href="../pa-ceiling/">PA ceiling</a> ·
+  <a href="https://github.com/xetlan/commerce-media-showcase">repo</a>
+</div>
+
+</div>
+
+<script>
+  Chart.defaults.font.family = "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif";
+  Chart.defaults.color = "#475569";
+
+  new Chart(document.getElementById("speedimpact"),{
+    type:"bar",
+    data:{
+      labels:["LCP <2.5s","LCP 2.5–4s","LCP >4s"],
+      datasets:[{label:"Conversion rate", data:[2.2, 1.9, 1.8], backgroundColor:["#059669","#f59e0b","#dc2626"], borderRadius:6}]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},title:{display:true,text:"Conversion rate by LCP bucket (Cart page)",font:{size:12,weight:"600"},color:"#334155"}},
+      scales:{y:{ticks:{callback:v=>v+"%"},grid:{color:"#eef2f7"}},x:{grid:{display:false}}}}
+  });
+</script>
+</body>
+</html>

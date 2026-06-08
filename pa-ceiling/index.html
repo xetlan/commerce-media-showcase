@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>PA Ceiling · Adidas Spring Drop — what enriched Product Analytics data alone can do</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg:#f6f7fb; --card:#ffffff; --ink:#0f172a; --mute:#64748b; --line:#e5e7eb;
+    --primary:#0891b2; --primary-soft:#ecfeff; --primary-dk:#155e75;
+    --good:#059669; --good-soft:#ecfdf5;
+    --warn:#d97706; --warn-soft:#fffbeb;
+    --bad:#dc2626; --bad-soft:#fef2f2;
+    --shadow:0 1px 2px rgba(15,23,42,.04), 0 4px 12px rgba(15,23,42,.04);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Helvetica,Arial,sans-serif}
+  a{color:var(--primary);text-decoration:none}
+  .wrap{max-width:1280px;margin:0 auto;padding:24px}
+  header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:8px}
+  h1{font-size:22px;font-weight:700;margin:0;letter-spacing:-.01em}
+  h1 .accent{color:var(--primary)}
+  .sub{color:var(--mute);font-size:13px}
+  .pillrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .pill{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-size:12px;color:var(--mute)}
+  .pill.brand{background:#ecfeff;border-color:#a5f3fc;color:var(--primary-dk);font-weight:600}
+  .banner{margin:12px 0 20px;padding:10px 14px;border-radius:8px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-size:12.5px}
+  .banner b{color:#7c2d12}
+  section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:var(--shadow);margin-top:20px}
+  section h2{margin:0 0 4px;font-size:15px;font-weight:700;letter-spacing:-.005em}
+  section .q{color:var(--mute);font-size:12.5px;margin-bottom:14px}
+  .pa-tag{display:inline-block;background:#ecfeff;color:var(--primary-dk);font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:4px;letter-spacing:.04em;text-transform:uppercase;margin-left:8px;border:1px solid #a5f3fc}
+  .grid{display:grid;gap:16px}
+  .kpi{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .kpi-card{background:linear-gradient(180deg,#fff,#fafdfe);border:1px solid #a5f3fc;border-radius:12px;padding:16px;box-shadow:var(--shadow)}
+  .kpi-label{color:var(--primary-dk);font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;font-weight:700}
+  .kpi-value{font-size:26px;font-weight:700;letter-spacing:-.02em;margin-top:6px;color:var(--ink)}
+  .kpi-note{color:var(--mute);font-size:11.5px;margin-top:6px}
+  .two{display:grid;gap:16px;grid-template-columns:1.3fr 1fr}
+  .three{display:grid;gap:16px;grid-template-columns:repeat(3,minmax(0,1fr))}
+  @media (max-width:980px){ .two,.three,.kpi{grid-template-columns:1fr} }
+  table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px}
+  th,td{padding:9px 10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+  th:first-child,td:first-child{text-align:left;white-space:normal}
+  th{background:#f8fafc;color:var(--mute);font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;border-top:1px solid var(--line)}
+  tbody tr:hover{background:#fafbfd}
+  tfoot td{font-weight:700;background:#f8fafc;border-bottom:none}
+  .tag{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11.5px;font-weight:600}
+  .tag-good{background:var(--good-soft);color:var(--good)}
+  .tag-warn{background:var(--warn-soft);color:var(--warn)}
+  .tag-bad{background:var(--bad-soft);color:var(--bad)}
+  .tag-pa{background:#ecfeff;color:var(--primary-dk)}
+  canvas{max-width:100%}
+  .takeaways{margin:14px 0 0;padding-left:18px;color:#1e293b;font-size:13px}
+  .takeaways li{margin:4px 0}
+  .reqs{margin-top:14px;padding:10px 12px;background:#ecfeff;border:1px dashed #a5f3fc;border-radius:8px;color:#155e75;font-size:12.5px}
+  .reqs code{background:#fff;color:var(--primary-dk);padding:1px 6px;border-radius:4px;font-size:11.5px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
+  .footer{margin:28px 0 8px;color:var(--mute);font-size:12px;text-align:center}
+  .num{font-variant-numeric:tabular-nums}
+  .matrix-table{font-size:12px}
+  .matrix-table th, .matrix-table td{padding:7px 8px;text-align:center}
+  .matrix-table td:first-child{text-align:left;font-weight:600;background:#f8fafc}
+  .cr-cell{font-weight:600;font-variant-numeric:tabular-nums}
+  .cohort-def{font-size:11px;color:var(--mute);font-weight:400;display:block}
+  .h-list{margin:8px 0;padding-left:0;list-style:none;font-size:13px}
+  .h-list li{padding:6px 10px;background:#f8fafc;border-left:3px solid var(--primary);border-radius:4px;margin-bottom:6px;display:flex;justify-content:space-between;gap:10px}
+  .h-list li b{color:var(--ink)}
+  .funnel-step{display:grid;grid-template-columns:200px 1fr 80px 80px;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px}
+  .funnel-step:last-child{border-bottom:none}
+  .funnel-bar{height:24px;border-radius:4px;background:linear-gradient(90deg,#cffafe,#0891b2)}
+  .funnel-step .stage{font-weight:600}
+  .funnel-step .num-cell{text-align:right;font-variant-numeric:tabular-nums}
+  .destination{display:grid;grid-template-columns:200px 1fr 80px 80px 100px;gap:10px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:8px;margin-bottom:8px;background:#fbfbfd}
+  .destination .dot{width:8px;height:8px;border-radius:50%;background:var(--good);display:inline-block;margin-right:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div>
+    <h1><span class="accent">PA Ceiling</span> — what enriched Product Analytics data alone can do</h1>
+    <div class="sub">Adidas Spring Drop ZX 500 RM · pushed to the limit on PA event data only · full identity, event &amp; user-property enrichment assumed</div>
+  </div>
+  <div class="pillrow">
+    <span class="pill brand">Contentsquare PA (Heap)</span>
+    <span class="pill">No DXA · No Merchandising · No Zoning</span>
+    <span class="pill">Last 30 days</span>
+  </div>
+</header>
+
+<div class="banner"><b>Illustrative data.</b> All figures fabricated. The point of this page is <b>capability ceiling</b> — every panel below is achievable from a single PA event stream with full property enrichment (events, event properties, user properties, stitched identity, A/B variant tagging, audience destination configuration). No DXA, no Merchandising module, no Zoning module is in play. Where PA cannot natively deliver a view, that absence is called out — there is no synthetic infill from other tools.</div>
+
+<!-- KPI strip -->
+<div class="grid kpi">
+  <div class="kpi-card">
+    <div class="kpi-label">Stitched users (cross-device)</div>
+    <div class="kpi-value num">1.42M</div>
+    <div class="kpi-note">vs 2.40M exposure sessions → 1.69 sessions/user avg</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">Multi-device conversions</div>
+    <div class="kpi-value num">18%</div>
+    <div class="kpi-note">826 of 4,578 conversions span ≥2 devices</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">A/B winner — Hero creative</div>
+    <div class="kpi-value num">Variant B · 1.66x</div>
+    <div class="kpi-note">99.7% Bayesian probability B beats A</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">D30 retention lift (exposed vs control)</div>
+    <div class="kpi-value num">+14 pp</div>
+    <div class="kpi-note">38% exposed return vs 24% control</div>
+  </div>
+</div>
+
+<!-- 1. Identity-Stitched Funnel -->
+<section>
+  <h2>1 · Cross-device identity-stitched funnel <span class="pa-tag">PA-only</span></h2>
+  <div class="q">How many users — not sessions — actually flow through the Adidas funnel when identity is stitched across devices?</div>
+  <div class="two">
+    <div>
+      <div class="funnel-step">
+        <div class="stage">placement_exposure</div>
+        <div class="funnel-bar" style="width:100%"></div>
+        <div class="num-cell">1,420,000</div>
+        <div class="num-cell">100%</div>
+      </div>
+      <div class="funnel-step">
+        <div class="stage">placement_click</div>
+        <div class="funnel-bar" style="width:42%"></div>
+        <div class="num-cell">59,640</div>
+        <div class="num-cell">4.2%</div>
+      </div>
+      <div class="funnel-step">
+        <div class="stage">add_to_cart</div>
+        <div class="funnel-bar" style="width:18%"></div>
+        <div class="num-cell">8,346</div>
+        <div class="num-cell">14.0%</div>
+      </div>
+      <div class="funnel-step">
+        <div class="stage">checkout_started</div>
+        <div class="funnel-bar" style="width:11%"></div>
+        <div class="num-cell">5,180</div>
+        <div class="num-cell">62.0%</div>
+      </div>
+      <div class="funnel-step">
+        <div class="stage">order_completed</div>
+        <div class="funnel-bar" style="width:6%"></div>
+        <div class="num-cell">4,578</div>
+        <div class="num-cell">88.4%</div>
+      </div>
+    </div>
+    <div>
+      <h4 style="margin:0 0 8px;font-size:13px;color:var(--ink)">Cross-device journeys (% of order_completed)</h4>
+      <div style="height:200px"><canvas id="crossdevice"></canvas></div>
+      <ul class="takeaways" style="margin-top:8px">
+        <li><b>18% of conversions</b> would be lost under session-anchored attribution. Stitched <code style="background:#ecfeff;color:#155e75;padding:1px 4px;border-radius:3px;font-size:11.5px">user_id</code> recovers them.</li>
+        <li>Avg <b>2.3 sessions, 3.6 days</b> from first exposure to order_completed.</li>
+        <li>Mobile-first / desktop-converting is the dominant cross-device pattern (62% of multi-device journeys).</li>
+      </ul>
+    </div>
+  </div>
+  <div class="reqs"><b>PA mechanism:</b> Stitched <code>user_id</code> on every event. Funnel defined in PA UI as ordered event sequence with cross-session window = 30 days. Time-between-step distributions computed natively.</div>
+</section>
+
+<!-- 2. Behavioral Cohort × Placement Matrix -->
+<section>
+  <h2>2 · Behavioral cohort × placement-type performance matrix <span class="pa-tag">PA-only</span></h2>
+  <div class="q">CR for every combination of user-property cohort and placement type — defined entirely in PA from event + user property combinations, not from pre-built segments.</div>
+  <table class="matrix-table">
+    <thead>
+      <tr>
+        <th>Cohort →<br>Placement ↓</th>
+        <th>High-intent<br><span class="cohort-def">ltv_bucket=high_intent</span></th>
+        <th>Loyalty members<br><span class="cohort-def">loyalty_tier=member</span></th>
+        <th>Lapsed (90d+)<br><span class="cohort-def">recency_bucket=lapsed_90</span></th>
+        <th>First-time<br><span class="cohort-def">total_orders=0</span></th>
+        <th>Mobile-only<br><span class="cohort-def">device_class=mobile only</span></th>
+        <th>≥3 Hero exp,<br>0 ATC<br><span class="cohort-def">behavioral</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Hero banner</td><td><span class="cr-cell" style="color:#059669">7.4%</span></td><td><span class="cr-cell" style="color:#059669">5.8%</span></td><td><span class="cr-cell" style="color:#d97706">2.6%</span></td><td><span class="cr-cell" style="color:#dc2626">1.4%</span></td><td><span class="cr-cell" style="color:#d97706">2.1%</span></td><td><span class="cr-cell" style="color:#dc2626">0.3%</span></td></tr>
+      <tr><td>Search carousel</td><td><span class="cr-cell" style="color:#059669">11.2%</span></td><td><span class="cr-cell" style="color:#059669">9.4%</span></td><td><span class="cr-cell" style="color:#059669">5.1%</span></td><td><span class="cr-cell" style="color:#d97706">3.2%</span></td><td><span class="cr-cell" style="color:#059669">7.0%</span></td><td><span class="cr-cell" style="color:#d97706">1.8%</span></td></tr>
+      <tr><td>Category PLP slot</td><td><span class="cr-cell" style="color:#059669">8.1%</span></td><td><span class="cr-cell" style="color:#059669">6.2%</span></td><td><span class="cr-cell" style="color:#d97706">3.1%</span></td><td><span class="cr-cell" style="color:#d97706">1.9%</span></td><td><span class="cr-cell" style="color:#d97706">4.2%</span></td><td><span class="cr-cell" style="color:#dc2626">0.8%</span></td></tr>
+      <tr><td>PDP cross-sell</td><td><span class="cr-cell" style="color:#059669">9.8%</span></td><td><span class="cr-cell" style="color:#059669">7.6%</span></td><td><span class="cr-cell" style="color:#d97706">4.4%</span></td><td><span class="cr-cell" style="color:#d97706">3.0%</span></td><td><span class="cr-cell" style="color:#059669">6.1%</span></td><td><span class="cr-cell" style="color:#d97706">2.4%</span></td></tr>
+      <tr><td>Checkout upsell</td><td><span class="cr-cell" style="color:#059669">22.4%</span></td><td><span class="cr-cell" style="color:#059669">18.6%</span></td><td><span class="cr-cell" style="color:#059669">11.0%</span></td><td><span class="cr-cell" style="color:#059669">9.2%</span></td><td><span class="cr-cell" style="color:#059669">14.8%</span></td><td><span class="cr-cell">—</span></td></tr>
+      <tr><td>Branded landing page</td><td><span class="cr-cell" style="color:#059669">6.4%</span></td><td><span class="cr-cell" style="color:#d97706">4.0%</span></td><td><span class="cr-cell" style="color:#d97706">2.8%</span></td><td><span class="cr-cell" style="color:#d97706">2.1%</span></td><td><span class="cr-cell" style="color:#d97706">3.4%</span></td><td><span class="cr-cell" style="color:#dc2626">0.5%</span></td></tr>
+    </tbody>
+  </table>
+  <ul class="takeaways">
+    <li>The "≥3 Hero exposures, 0 ATC" cohort is <b>185,420 users</b> — defined entirely from event-property combinations, not from any pre-built segment. Their CR across every placement is below floor: this is the inverse-of-converters audience to fund a retargeting wave against.</li>
+    <li>Mobile-only first-time visitors are converting on Search carousel at 3.2x the rate of Hero banner — re-weight new-visitor inventory toward Search.</li>
+    <li>Checkout upsell wins across every cohort. The lowest-converting Checkout cell (9.2% for first-time) still beats the highest-converting Hero cell (7.4% for high-intent).</li>
+  </ul>
+  <div class="reqs"><b>PA mechanism:</b> Each cohort is a PA segment definition over user/event properties. The matrix is one query: <code>order_completed</code> count grouped by <code>placement_type</code> × cohort-membership, normalized by <code>placement_click</code>. Adding a 7th cohort tomorrow is one segment definition; the matrix recomputes immediately.</div>
+</section>
+
+<!-- 3. Retention Curves -->
+<section>
+  <h2>3 · Retention curves — exposed cohort vs control <span class="pa-tag">PA-only</span></h2>
+  <div class="q">Do users who saw Adidas placements return more often than users who didn't? The <i>real</i> halo question.</div>
+  <div style="height:280px"><canvas id="retention"></canvas></div>
+  <ul class="takeaways">
+    <li><b>D30 retention: 38% exposed vs 24% control</b> — exposed users return at 1.58× the rate of comparable non-exposed users.</li>
+    <li>Effect is largest at D7–D14 (the "consideration revisit" window): 56% vs 38% (+18 pp).</li>
+    <li>Control cohort built from PA matched-pair propensity: users with same <code style="background:#ecfeff;color:#155e75;padding:1px 4px;border-radius:3px;font-size:11.5px">ltv_bucket</code>, <code style="background:#ecfeff;color:#155e75;padding:1px 4px;border-radius:3px;font-size:11.5px">device_class</code>, <code style="background:#ecfeff;color:#155e75;padding:1px 4px;border-radius:3px;font-size:11.5px">first_purchase_date</code> bucket who did NOT receive Adidas exposure in the campaign window.</li>
+    <li>This is the behavioral counterpart of the aggregate-volume halo measurement — measures <i>repeat-behavior uplift per user</i>, not just "did organic search go up".</li>
+  </ul>
+  <div class="reqs"><b>PA mechanism:</b> Two PA cohorts (exposed / matched-control). Retention report: % of cohort returning with any qualifying event at D1, D7, D14, D30, D60, D90. Native PA view — no external tool, no DXA equivalent.</div>
+</section>
+
+<!-- 4. A/B Variant Performance -->
+<section>
+  <h2>4 · A/B variant performance — Hero creative A vs B <span class="pa-tag">PA-only</span></h2>
+  <div class="q">Hero creative ran two variants under the same campaign. <code style="background:#ecfeff;color:#155e75;padding:1px 4px;border-radius:3px;font-size:11.5px">experiment_variant</code> on every downstream event → full-funnel comparison in one query.</div>
+  <div class="two">
+    <div>
+      <table>
+        <thead><tr><th>Stage</th><th>Variant A<br>(lifestyle imagery)</th><th>Variant B<br>(product grid)</th><th>Lift</th></tr></thead>
+        <tbody>
+          <tr><td>Exposure sessions (50/50 split)</td><td class="num">710,000</td><td class="num">710,000</td><td class="num">—</td></tr>
+          <tr><td>Placement clicks</td><td class="num">8,520</td><td class="num">14,168</td><td class="num"><span class="tag tag-good">+66%</span></td></tr>
+          <tr><td>CTR</td><td class="num">1.20%</td><td class="num">2.00%</td><td class="num"><span class="tag tag-good">+0.80 pp</span></td></tr>
+          <tr><td>ATC rate (of clicks)</td><td class="num">8.0%</td><td class="num">9.6%</td><td class="num"><span class="tag tag-good">+1.6 pp</span></td></tr>
+          <tr><td>Conversions</td><td class="num">307</td><td class="num">510</td><td class="num"><span class="tag tag-good">+66%</span></td></tr>
+          <tr><td>Revenue</td><td class="num">$14,765</td><td class="num">$24,506</td><td class="num"><span class="tag tag-good">+$9.7K</span></td></tr>
+          <tr><td>Bayesian probability B &gt; A</td><td colspan="2" class="num"><b>99.7%</b></td><td><span class="tag tag-good">conclusive</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <h4 style="margin:0 0 8px;font-size:13px;color:var(--ink)">Subgroup variant effect — where B wins biggest</h4>
+      <ul class="h-list">
+        <li><span>Mobile · first-time visitors</span><b>+2.4× lift on B</b></li>
+        <li><span>Mobile · loyalty members</span><b>+1.9× lift on B</b></li>
+        <li><span>Desktop · high-intent</span><b>+1.4× lift on B</b></li>
+        <li><span>Desktop · lapsed (90d+)</span><b>+1.2× lift on B</b></li>
+        <li><span>Tablet (any)</span><b>+0.9× — neutral</b></li>
+      </ul>
+    </div>
+  </div>
+  <ul class="takeaways">
+    <li>Variant B wins overall and across every meaningful subgroup. <b>Kill A, scale B</b> for the remaining Spring window.</li>
+    <li>The mobile-first-time effect is the most actionable — this is the cohort where creative format matters most. Encode the lesson into the Summer Drop brief at planning stage.</li>
+  </ul>
+  <div class="reqs"><b>PA mechanism:</b> <code>experiment_variant</code> stamped on every <code>placement_exposure</code>, <code>placement_click</code>, downstream conversion event. PA's built-in A/B analysis runs Bayesian inference on funnel CR. No separate experiment-platform integration needed.</div>
+</section>
+
+<!-- 5. Multi-Touch Attribution -->
+<section>
+  <h2>5 · Multi-touch attribution — five models, one event stream <span class="pa-tag">PA-only</span></h2>
+  <div class="q">"Attributed revenue" depends entirely on the model. PA computes all five from the same stitched event stream in one query.</div>
+  <div class="two">
+    <div>
+      <div style="height:280px"><canvas id="attribution"></canvas></div>
+    </div>
+    <div>
+      <table>
+        <thead><tr><th>Model</th><th>Adidas attributed revenue</th><th>Implied ROAS</th></tr></thead>
+        <tbody>
+          <tr><td>First-touch</td><td class="num">$612,400</td><td class="num">4.78x</td></tr>
+          <tr><td>Last-touch (default)</td><td class="num"><b>$503,580</b></td><td class="num"><b>3.93x</b></td></tr>
+          <tr><td>Linear</td><td class="num">$478,200</td><td class="num">3.74x</td></tr>
+          <tr><td>Time-decay (7-day half-life)</td><td class="num">$521,400</td><td class="num">4.07x</td></tr>
+          <tr><td>Position-based (40/20/40)</td><td class="num">$542,100</td><td class="num">4.24x</td></tr>
+          <tr><td><b>Range</b></td><td class="num"><b>$134K spread</b></td><td class="num"><b>3.74x → 4.78x</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <ul class="takeaways">
+    <li>Reported ROAS swings from <b>3.74x to 4.78x</b> depending on attribution model. That spread is <i>larger than any optimization gain</i> identified elsewhere in this campaign — the model choice is the biggest single lever on the headline number.</li>
+    <li>For commerce media, time-decay or position-based are most defensible: they credit both the exposure that introduced the user (Hero) and the click that closed the loop (Checkout). Recommend <b>4.07x ROAS as the standing headline</b>.</li>
+    <li>For internal optimization work, keep last-touch as the placement-comparison metric — it's the cleanest "did this specific placement convert."</li>
+  </ul>
+  <div class="reqs"><b>PA mechanism:</b> All five models computed natively from the touchpoint sequence in the stitched event stream. Same query, five tabs.</div>
+</section>
+
+<!-- 6. Predictive Propensity Scoring -->
+<section>
+  <h2>6 · Predictive propensity-to-convert scoring <span class="pa-tag">PA-only</span></h2>
+  <div class="q">PA's behavioral signals produce a per-user score for likelihood to convert in the next 14 days. Distribution + driving features.</div>
+  <div class="three">
+    <div>
+      <h4 style="margin:0 0 8px;font-size:13px;color:var(--ink)">User-bucket distribution</h4>
+      <div style="height:200px"><canvas id="propensity"></canvas></div>
+    </div>
+    <div>
+      <h4 style="margin:0 0 8px;font-size:13px;color:var(--ink)">CR observed per bucket (14d)</h4>
+      <table style="font-size:12px">
+        <thead><tr><th>Bucket</th><th>Users</th><th>CR</th></tr></thead>
+        <tbody>
+          <tr><td><span style="color:#059669">●</span> High</td><td class="num">170K</td><td class="num">24.0%</td></tr>
+          <tr><td><span style="color:#0891b2">●</span> Medium</td><td class="num">582K</td><td class="num">4.8%</td></tr>
+          <tr><td><span style="color:#94a3b8">●</span> Low</td><td class="num">668K</td><td class="num">1.2%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <h4 style="margin:0 0 8px;font-size:13px;color:var(--ink)">Top features driving propensity</h4>
+      <ul class="h-list" style="font-size:12px">
+        <li><span>Viewed PDP in last 7d</span><b>+0.32</b></li>
+        <li><span>loyalty_tier = member</span><b>+0.28</b></li>
+        <li><span>2+ Adidas exposures</span><b>+0.21</b></li>
+        <li><span>Has prior order</span><b>+0.18</b></li>
+        <li><span>device_class = desktop</span><b>+0.09</b></li>
+      </ul>
+    </div>
+  </div>
+  <ul class="takeaways">
+    <li><b>High-propensity users (170K) account for 41K of expected conversions</b> at 24% CR — that's 90% of total conversions concentrated in 12% of the audience.</li>
+    <li>Re-allocate Hero spend to a propensity-weighted bidding strategy: max bid on High, deprioritize Low. Expected lift: 15–22% revenue at same budget.</li>
+    <li>Cold-list activation: users who score High but have zero exposure yet → 22K users → next campaign's primary targeting cohort.</li>
+  </ul>
+  <div class="reqs"><b>PA mechanism:</b> Model trained on historical event sequences with <code>order_completed</code> as the label. Refreshes daily. Score exposed as user property <code>propensity_to_convert_14d</code> — available immediately in cohorts, funnels, and audience destinations.</div>
+</section>
+
+<!-- 7. Audience Destinations & Activation -->
+<section>
+  <h2>7 · Audience destinations — behavioral cohorts → ad platforms &amp; CRM <span class="pa-tag">PA-only</span></h2>
+  <div class="q">Every cohort defined in PA syncs to external destinations automatically — the loop from analysis to activation is one click, not a CSV export.</div>
+
+  <div class="destination" style="font-weight:700;background:#f8fafc"><div>Cohort</div><div>Definition</div><div>Size</div><div>Sync</div><div>Destination</div></div>
+  <div class="destination"><div><span class="dot"></span>Hero non-converters</div><div>≥3 hero_banner exposures, 0 ATC in 14d</div><div class="num">185K</div><div class="num">hourly</div><div>Meta Ads · Google Ads</div></div>
+  <div class="destination"><div><span class="dot"></span>High-propensity cold</div><div>propensity ≥0.7, 0 exposures in 30d</div><div class="num">22K</div><div class="num">daily</div><div>Meta Ads · CRM</div></div>
+  <div class="destination"><div><span class="dot"></span>Checkout abandoners</div><div>checkout_started, no order_completed in 24h</div><div class="num">1.8K</div><div class="num">real-time</div><div>Klaviyo · Braze</div></div>
+  <div class="destination"><div><span class="dot"></span>ATC bouncers — Branded LP</div><div>add_to_cart on branded_landing_page, exit in same session</div><div class="num">588</div><div class="num">hourly</div><div>Salesforce CRM</div></div>
+  <div class="destination"><div><span class="dot"></span>Loyalty + High-intent + Adidas-exposed</div><div>loyalty_tier=member AND ltv_bucket=high_intent AND ≥1 exposure</div><div class="num">94K</div><div class="num">daily</div><div>Meta Ads · CRM</div></div>
+  <div class="destination"><div><span class="dot"></span>Cross-device pre-converters</div><div>placement_click on mobile, no order_completed yet</div><div class="num">31K</div><div class="num">hourly</div><div>Google Ads</div></div>
+  <div class="destination"><div><span class="dot"></span>Lapsed-but-engaged</div><div>recency_bucket=lapsed_90, ≥2 Adidas exposures</div><div class="num">68K</div><div class="num">daily</div><div>Klaviyo · Meta Ads</div></div>
+
+  <ul class="takeaways">
+    <li>Each row is a behavioral cohort defined entirely in PA — no manual list build, no CSV export to ops, no IT ticket. Cohort definitions update in real time as events flow in.</li>
+    <li><b>Total covered audience: ~393K users</b> active across destinations from this campaign's behavioral data alone.</li>
+    <li>The "Hero non-converters" cohort is the single biggest re-engagement opportunity — 185K users, all of them having seen Adidas content but not engaged, automatically pushed to retargeting platforms.</li>
+  </ul>
+  <div class="reqs"><b>PA mechanism:</b> Native PA destinations (Segment-style integrations) configured per cohort. No middleware, no warehouse round-trip.</div>
+</section>
+
+<!-- Closing — what PA cannot do here -->
+<section style="background:#fef2f2;border-color:#fecaca">
+  <h2 style="color:#991b1b">What PA does NOT do well here — be honest</h2>
+  <div class="q" style="color:#7f1d1d">This page pushed PA to its ceiling. Below the ceiling are real gaps DXA fills.</div>
+  <ul class="takeaways" style="color:#7f1d1d">
+    <li><b>No managed Frustration Score</b> — must be computed from <code style="background:#fee2e2;color:#991b1b;padding:1px 4px;border-radius:3px;font-size:11.5px">frustration_signal</code> aggregations. Decent proxy, not the same number.</li>
+    <li><b>No visual Zoning heatmap renderer</b> — engagement per zone is a table or chart, not a click-through-able pixel-overlay on the page screenshot.</li>
+    <li><b>No native hesitation / time-to-click / attractiveness metrics per zone</b> — PA captures clicks but not the rich pre-click engagement signals DXA Zoning produces.</li>
+    <li><b>Web Performance / Core Web Vitals tracking is shallow</b> — PA can capture <code style="background:#fee2e2;color:#991b1b;padding:1px 4px;border-radius:3px;font-size:11.5px">slow_load</code> as an event signal, but LCP / INP / CLS as managed metrics with conversion correlation live in DXA's Speed Lab.</li>
+    <li><b>No native scroll/attention maps</b> — PA shows whether a user clicked, not the visual surface area they actually saw.</li>
+    <li><b>No error analysis surface</b> — JS errors and API errors as <i>events</i>, yes; the impact-on-goal dollarization that DXA's Error Analysis produces, no.</li>
+  </ul>
+</section>
+
+<div class="footer">
+  Companion editions →
+  <a href="../">original</a> ·
+  <a href="../narrated/">narrated</a> ·
+  <a href="../case-study/">case study</a> ·
+  <a href="../pa-enriched/">PA enriched</a> ·
+  <a href="../dxa-ceiling/">DXA ceiling</a> ·
+  <a href="https://github.com/xetlan/commerce-media-showcase">repo</a>
+</div>
+
+</div>
+
+<script>
+  Chart.defaults.font.family = "-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif";
+  Chart.defaults.color = "#475569";
+
+  new Chart(document.getElementById("crossdevice"),{
+    type:"doughnut",
+    data:{labels:["Single device","Mobile → Desktop","Desktop → Mobile","Other multi-device"],
+      datasets:[{data:[82,11,4,3],backgroundColor:["#cbd5e1","#0891b2","#06b6d4","#67e8f9"],borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:"60%",
+      plugins:{legend:{position:"right",labels:{boxWidth:10,font:{size:11}}}}}
+  });
+
+  new Chart(document.getElementById("retention"),{
+    type:"line",
+    data:{labels:["D1","D7","D14","D30","D60","D90"],
+      datasets:[
+        {label:"Adidas-exposed cohort",data:[82,56,46,38,30,24],borderColor:"#0891b2",backgroundColor:"rgba(8,145,178,.12)",fill:true,tension:.35,borderWidth:2,pointRadius:3},
+        {label:"Matched control (no exposure)",data:[68,38,30,24,19,15],borderColor:"#94a3b8",backgroundColor:"rgba(148,163,184,.08)",fill:true,tension:.35,borderWidth:2,pointRadius:3,borderDash:[5,5]}
+      ]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:"bottom",labels:{boxWidth:12,font:{size:11}}},title:{display:true,text:"% of cohort returning by day-since-first-exposure",font:{size:12,weight:"600"},color:"#334155"}},
+      scales:{y:{ticks:{callback:v=>v+"%"},grid:{color:"#eef2f7"},beginAtZero:true,max:100},x:{grid:{display:false}}}}
+  });
+
+  new Chart(document.getElementById("attribution"),{
+    type:"bar",
+    data:{labels:["First-touch","Last-touch (default)","Linear","Time-decay","Position-based"],
+      datasets:[{label:"Attributed revenue",data:[612400,503580,478200,521400,542100],
+        backgroundColor:["#06b6d4","#0891b2","#94a3b8","#0e7490","#155e75"],borderRadius:6}]},
+    options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},title:{display:true,text:"Same campaign, five attribution models",font:{size:12,weight:"600"},color:"#334155"}},
+      scales:{x:{ticks:{callback:v=>"$"+(v/1000)+"k"},grid:{color:"#eef2f7"}},y:{grid:{display:false}}}}
+  });
+
+  new Chart(document.getElementById("propensity"),{
+    type:"doughnut",
+    data:{labels:["High (≥0.7)","Medium (0.3–0.7)","Low (<0.3)"],
+      datasets:[{data:[12,41,47],backgroundColor:["#059669","#0891b2","#94a3b8"],borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:"60%",
+      plugins:{legend:{position:"bottom",labels:{boxWidth:10,font:{size:11}}}}}
+  });
+</script>
+</body>
+</html>
